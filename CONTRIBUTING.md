@@ -9,12 +9,20 @@ Requirements:
 - macOS 13 or newer
 - Swift 5.9 or newer
 - Deskflow for manual integration testing
+- Xcode and a local Apple Development identity for the functional GUI manager
 
 Build and check the project:
 
 ```sh
 swift build -c release
+swift test
 ./tests/smoke.sh
+```
+
+Build the native manager bundle without installing it:
+
+```sh
+make manager
 ```
 
 The smoke suite must not modify the installed LaunchAgents or a user's Deskflow configuration.
@@ -27,5 +35,11 @@ The smoke suite must not modify the installed LaunchAgents or a user's Deskflow 
 - Preserve the initial active-session check as well as the activation/resignation notifications.
 - Test installer and uninstaller changes with paths and account names containing punctuation.
 - Document changes that require users to re-grant macOS permissions.
+- Keep the privileged manager helper management-only; it must never launch Deskflow.
+- Keep privileged requests typed and UID-based. Do not add arbitrary command, shell, path, or environment execution over XPC.
+- Require client code-signing validation and administrator authorization for every privileged mutation.
+- Treat the supervisor bundled inside the signed manager app as the only GUI installation payload.
+- Keep manager-app upgrades on the fixed `/Applications` path and preserve the atomic exchange and rollback checks.
+- Update `ManagerConstants.managerVersion` and `CFBundleShortVersionString` together whenever manager/helper compatibility changes.
 
-Changes to switching behavior should include the manual two-user test results described in [tests/manual-fast-user-switching.md](tests/manual-fast-user-switching.md).
+Changes to switching behavior should include the manual two-user test results described in [tests/manual-fast-user-switching.md](tests/manual-fast-user-switching.md). Changes to the native manager or privileged lifecycle operations should also follow [tests/manual-gui-manager.md](tests/manual-gui-manager.md).

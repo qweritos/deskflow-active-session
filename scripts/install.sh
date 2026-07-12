@@ -7,14 +7,13 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 readonly ROOT_DIR=${0:A:h:h}
 readonly LABEL="com.local.deskflow.active-session"
 readonly BINARY_NAME="deskflow-session-supervisor"
-readonly BUILD_BINARY="$ROOT_DIR/.build/release/$BINARY_NAME"
 readonly INSTALL_BINARY="/usr/local/libexec/$BINARY_NAME"
 readonly SHARE_DIR="/usr/local/share/deskflow-active-session"
 readonly CORE_PATH=${DESKFLOW_CORE:-/Applications/Deskflow.app/Contents/MacOS/deskflow-core}
 readonly HELPER_ID="io.github.qweritos.deskflow-active-session.supervisor"
 
 usage() {
-  print -u2 "Usage: ${0:t} [--dry-run] USER [USER ...]"
+  print -u2 "Usage: ${0:t} [--dry-run] [--prebuilt PATH] USER [USER ...]"
   print -u2 "Example: ${0:t} alice alice-work"
 }
 
@@ -69,10 +68,35 @@ render_plist() {
 }
 
 dry_run=0
-if [[ ${1:-} == "--dry-run" ]]; then
-  dry_run=1
-  shift
-fi
+prebuilt=""
+while (( $# > 0 )); do
+  case $1 in
+    --dry-run)
+      dry_run=1
+      shift
+      ;;
+    --prebuilt)
+      (( $# >= 2 )) || {
+        print -u2 "--prebuilt requires a path"
+        exit 64
+      }
+      prebuilt=$2
+      shift 2
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      print -u2 "Unknown option: $1"
+      usage
+      exit 64
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
 
 (( $# > 0 )) || {
   usage
@@ -111,18 +135,36 @@ for user in "$@"; do
   USER_GROUP[$user]=$group
 done
 
-print "Building release binary..."
-(cd "$ROOT_DIR" && swift build -c release)
-
-if [[ -n ${CODESIGN_IDENTITY:-} ]]; then
-  codesign --force --sign "$CODESIGN_IDENTITY" \
-    --identifier "$HELPER_ID" --options runtime --timestamp "$BUILD_BINARY" >/dev/null
+if [[ -n "$prebuilt" ]]; then
+  BUILD_BINARY=${prebuilt:A}
+  [[ -x "$BUILD_BINARY" ]] || {
+    print -u2 "Prebuilt supervisor is not executable: $BUILD_BINARY"
+    exit 66
+  }
+  codesign --verify --strict "$BUILD_BINARY"
+  actual_id=$(codesign -d --verbose=4 "$BUILD_BINARY" 2>&1 \
+    | sed -n 's/^Identifier=//p')
+  [[ "$actual_id" == "$HELPER_ID" ]] || {
+    print -u2 "Unexpected prebuilt supervisor identifier: ${actual_id:-missing}"
+    exit 65
+  }
+  print "Using verified prebuilt supervisor."
 else
-  codesign --force --sign - --identifier "$HELPER_ID" \
-    --requirements "=designated => identifier \"$HELPER_ID\"" \
-    "$BUILD_BINARY" >/dev/null
+  BUILD_BINARY="$ROOT_DIR/.build/release/$BINARY_NAME"
+  print "Building release binary..."
+  (cd "$ROOT_DIR" && swift build -c release --product "$BINARY_NAME")
+
+  if [[ -n ${CODESIGN_IDENTITY:-} ]]; then
+    codesign --force --sign "$CODESIGN_IDENTITY" \
+      --identifier "$HELPER_ID" --options runtime --timestamp "$BUILD_BINARY" >/dev/null
+  else
+    codesign --force --sign - --identifier "$HELPER_ID" \
+      --requirements "=designated => identifier \"$HELPER_ID\"" \
+      "$BUILD_BINARY" >/dev/null
+  fi
+  codesign --verify --strict "$BUILD_BINARY"
 fi
-codesign --verify --strict "$BUILD_BINARY"
+readonly BUILD_BINARY
 
 if (( dry_run )); then
   for user in $USERS; do

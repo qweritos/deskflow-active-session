@@ -3,7 +3,7 @@ CONFIGURATION ?= release
 BINARY := .build/$(CONFIGURATION)/deskflow-session-supervisor
 USERS ?=
 
-.PHONY: all build check install uninstall status clean
+.PHONY: all build check manager manager-install install uninstall status clean
 
 all: build
 
@@ -12,6 +12,12 @@ build:
 
 check:
 	./tests/smoke.sh
+
+manager:
+	./scripts/build-manager-app.sh
+
+manager-install:
+	./scripts/install-manager-app.sh
 
 install: build
 	./scripts/install.sh $(USERS)

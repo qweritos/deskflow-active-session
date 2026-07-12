@@ -19,7 +19,8 @@
 - Keep the keyboard and mouse connected to a shared Mac available to another computer after Fast User Switching.
 - Run the Deskflow CLI server only for the foreground macOS desktop session.
 - Preserve each account's default Deskflow configuration, screen layout, certificates, and TLS keys.
-- Avoid a TCP proxy, root daemon, or always-running Deskflow GUI.
+- Avoid running Deskflow through a TCP proxy, root daemon, or always-running Deskflow GUI.
+- Manage participating accounts with either the native macOS app or the headless scripts.
 
 macOS keeps background desktop sessions and their processes alive. Running Deskflow as a login item for every user can therefore leave multiple servers competing for TCP port 24800 and macOS input permissions.
 
@@ -63,19 +64,46 @@ Finally, sign into every participating account and:
 - Configure it in server mode and save the screen layout.
 - Quit the GUI and disable any separate Deskflow login item.
 
-### Install the supervisor
-
-Clone the repository and name every participating account:
+Clone the repository:
 
 ```bash
 git clone https://github.com/qweritos/deskflow-active-session.git
 cd deskflow-active-session
+```
+
+### CLI installer
+
+Install the session supervisor for every participating account:
+
+```bash
 ./scripts/install.sh alice alice-work
 ```
 
 The installer requests administrator access, builds and ad-hoc signs one shared supervisor, then installs a LaunchAgent for each named account. Run the same command again to upgrade.
 
-### Install options
+### GUI manager
+
+The optional native manager is built from source. A functional local build requires full Xcode and a usable Apple Development signing identity; an ad-hoc build is an interface preview only. Distributed builds require Developer ID signing and notarization.
+
+Confirm that a signing identity is available:
+
+```bash
+security find-identity -v -p codesigning
+```
+
+Build, sign, install, and open the native manager:
+
+```bash
+./scripts/install-manager-app.sh
+```
+
+The script stages and verifies a root-owned app in a protected system directory, then atomically exchanges it into `/Applications`. It does not notarize or staple the build. On first launch, select **Set Up Helper**. If macOS requests approval, enable the manager in **System Settings → General → Login Items**, return to the app, select the participating accounts, and choose **Install / Upgrade**.
+
+The management helper installs and controls the CLI supervisor. It never executes `deskflow-core` directly and never receives Accessibility or Input Monitoring access.
+
+See the [GUI manager guide](docs/gui-manager.md) for signing, universal builds, helper approval, upgrades, and removal.
+
+### CLI install options
 
 Validate the build, account lookup, signature, and generated plist without installing:
 
@@ -91,13 +119,15 @@ DESKFLOW_CORE=/custom/path/deskflow-core ./scripts/install.sh alice alice-work
 
 ## macOS permissions
 
-The helper launches `deskflow-core`, so macOS may attribute input-access requests to the helper instead of the Deskflow GUI. Add this exact installed binary to **System Settings → Privacy & Security → Accessibility** and **Input Monitoring** if prompted:
+The session supervisor launches `deskflow-core`, so macOS may attribute input-access requests to the supervisor instead of the Deskflow GUI. Add this exact installed binary to **System Settings → Privacy & Security → Accessibility** and **Input Monitoring** if prompted:
 
 ```text
 /usr/local/libexec/deskflow-session-supervisor
 ```
 
 > **Important:** Enabling only the Deskflow GUI may leave the CLI server unauthorized. Grant permissions to the exact helper path above.
+
+The GUI manager can open the relevant System Settings page, but it cannot grant or inspect the supervisor's privacy authorization.
 
 If a permission toggle looks enabled but macOS still rejects the helper:
 
@@ -108,7 +138,7 @@ If a permission toggle looks enabled but macOS still rejects the helper:
 
 The installer never modifies the macOS privacy database.
 
-Local builds use a stable ad-hoc designated identifier at a root-protected path. A first migration from a differently signed build—or some macOS updates—may still require the helper to be removed and re-added. For distributed builds, set `CODESIGN_IDENTITY` to a Developer ID Application identity.
+The CLI installer uses a stable ad-hoc designated identifier at a root-protected path. The GUI installs the supervisor signed with the app's selected identity. Changing installer or signing methods—or some macOS updates—may require the supervisor to be removed and re-added in privacy settings.
 
 ## Deskflow configuration
 
@@ -127,7 +157,7 @@ Deskflow loads each user's default settings and server layout:
 
 The installer does not copy or alter user configuration, screen layouts, certificates, or TLS keys. Screen placement can intentionally differ between accounts, so confirm the configured exit edge in each layout.
 
-Optional supervisor arguments:
+The CLI workflow supports optional supervisor arguments:
 
 ```text
 --core PATH
@@ -137,6 +167,8 @@ Optional supervisor arguments:
 ```
 
 Run `deskflow-session-supervisor --help` for the complete interface.
+
+The GUI manager intentionally supports only the standard Deskflow path, default per-user settings, default supervisor timings, and TCP port 24800. Use the CLI workflow for `DESKFLOW_CORE`, `--settings`, timing overrides, custom agent arguments, or non-default ports. The GUI refuses to replace a managed LaunchAgent whose arguments were manually customized.
 
 ## Usage
 
@@ -190,7 +222,9 @@ Discover and remove all LaunchAgents installed under local user accounts:
 ./scripts/uninstall.sh --all
 ```
 
-This does not remove Deskflow, user configuration, certificates, logs, or macOS privacy decisions.
+In the GUI, use **Uninstall** for selected accounts. Removing the final managed account also removes the shared supervisor. For complete GUI removal, then select **Remove Management Helper**, quit the app, and delete it from `/Applications`.
+
+Neither workflow removes Deskflow, user configuration, certificates, logs, or macOS privacy decisions.
 
 ## How it works
 
@@ -205,6 +239,8 @@ Each participating account runs the same Aqua LaunchAgent. The native supervisor
 
 The supervisor stays inside each user's GUI bootstrap session, so Deskflow receives the correct home directory, WindowServer context, and default settings. A root LaunchDaemon must not run Deskflow itself.
 
+The optional GUI registers an on-demand, management-only LaunchDaemon through macOS Service Management. It accepts typed requests from the signed manager app, requires administrator authorization for changes, and only installs or controls user-scoped LaunchAgents. It never executes `deskflow-core` directly.
+
 ## Limitations
 
 - Fast User Switching briefly interrupts the remote client while the server changes users.
@@ -214,6 +250,7 @@ The supervisor stays inside each user's GUI bootstrap session, so Deskflow recei
 - A forced shutdown can leave the port unavailable briefly; the supervisor retries automatically.
 - Full Fast User Switching behavior requires manual testing on a two-user Mac.
 - Ad-hoc local signatures do not provide permission continuity across changed builds. Distributed releases should use a stable Developer ID signature and notarization.
+- GUI helper registration requires a properly signed app in `/Applications`. Public GUI builds must also be notarized.
 
 ## Tested environment
 
@@ -230,9 +267,16 @@ Build and run smoke checks without installing:
 ```bash
 make build
 make check
+swift test
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and the [manual Fast User Switching test](tests/manual-fast-user-switching.md).
+Build the native manager app:
+
+```bash
+make manager
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md), the [manual Fast User Switching test](tests/manual-fast-user-switching.md), and the [manual GUI manager test](tests/manual-gui-manager.md).
 
 ## License
 

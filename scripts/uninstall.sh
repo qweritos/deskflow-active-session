@@ -13,10 +13,13 @@ authorize_sudo() {
 }
 
 discover_users() {
-  dscl . -list /Users UniqueID | awk '$2 >= 500 {print $1}' | while read -r user; do
+  while read -r user; do
     home=$(dscl . -read "/Users/$user" NFSHomeDirectory 2>/dev/null | sed -n 's/^NFSHomeDirectory: //p')
-    [[ -n "$home" ]] && sudo test -f "$home/Library/LaunchAgents/$LABEL.plist" && print "$user"
-  done
+    if [[ -n "$home" ]] && sudo test -f "$home/Library/LaunchAgents/$LABEL.plist"; then
+      print "$user"
+    fi
+  done < <(dscl . -list /Users UniqueID | awk '$2 >= 500 {print $1}')
+  return 0
 }
 
 authorize_sudo

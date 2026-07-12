@@ -3,7 +3,7 @@ import CoreGraphics
 import Darwin
 import Foundation
 
-private let programVersion = "0.1.0"
+private let programVersion = "0.2.0"
 
 private struct Options {
   var corePath =
@@ -179,7 +179,7 @@ private func validate(_ options: Options) -> Bool {
   return valid
 }
 
-private final class DeskflowSessionSupervisor {
+private final class DeskflowSessionSupervisor: @unchecked Sendable {
   private let options: Options
   private let coreURL: URL
   private let processLock: ProcessLock
@@ -319,13 +319,15 @@ private final class DeskflowSessionSupervisor {
       process.arguments?.append(contentsOf: ["--settings", settingsPath])
     }
     process.currentDirectoryURL = FileManager.default.homeDirectoryForCurrentUser
-    process.terminationHandler = { [weak self, weak process] terminated in
-      DispatchQueue.main.async {
-        guard let self, let process, self.child === process else { return }
+    process.terminationHandler = { [weak self] terminated in
+      let pid = terminated.processIdentifier
+      let status = terminated.terminationStatus
+      let reason = terminated.terminationReason.rawValue
+      DispatchQueue.main.async { [weak self] in
+        guard let self, self.child?.processIdentifier == pid else { return }
         self.child = nil
         self.log(
-          "server exited: status=\(terminated.terminationStatus) "
-            + "reason=\(terminated.terminationReason.rawValue)"
+          "server exited: status=\(status) reason=\(reason)"
         )
         self.retryIfStillActive()
       }
