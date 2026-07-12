@@ -14,19 +14,37 @@ When Fast User Switching moves an account into the background, this utility stop
 
 There is no TCP proxy, system daemon, or Deskflow GUI process. Inactive accounts retain only a lightweight per-user supervisor.
 
-## Requirements
+## Installation prerequisites
 
-- macOS 13 or newer
-- Deskflow installed in `/Applications/Deskflow.app`
-- Deskflow configured as a server in every participating account
-- Administrator access during installation
-- A Swift toolchain when building from source
+Before running the installer:
 
-The initial implementation was tested on macOS 15.7.8 with Deskflow 1.26.0 on Intel. It builds natively on the Mac running the installer.
+1. Use macOS 13 or newer and make sure every participating account is a local GUI user.
+2. Install the Xcode Command Line Tools. They provide the Swift toolchain used to build the supervisor:
+
+   ```sh
+   xcode-select --install
+   swift --version
+   ```
+
+3. Install Deskflow in `/Applications/Deskflow.app`. The recommended Homebrew installation is:
+
+   ```sh
+   brew tap deskflow/tap
+   brew install deskflow
+   ```
+
+   Alternatively, install the app from the [official Deskflow releases](https://github.com/deskflow/deskflow/releases). Confirm that its CLI core is available:
+
+   ```sh
+   test -x /Applications/Deskflow.app/Contents/MacOS/deskflow-core
+   ```
+
+4. Sign into every participating account, open Deskflow once, configure it in server mode, save the screen layout, then quit the GUI and disable any separate Deskflow login item.
+5. Use an administrator account to run the installer. It needs `sudo` to install the shared supervisor and each user's LaunchAgent.
+
+The initial implementation was tested on macOS 15.7.8 with Deskflow 1.26.0 on Intel. It builds natively on the Mac running the installer. macOS input permissions are configured [after installation](#macos-permissions), when the installed helper exists.
 
 ## Install
-
-First, sign into every participating account, configure Deskflow as a server, then quit its GUI and disable any separate Deskflow login item.
 
 Build and install agents for the accounts:
 
