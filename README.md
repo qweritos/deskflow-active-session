@@ -1,82 +1,105 @@
-# deskflow-active-session
+<div align="center">
+  <h1><img alt="Deskflow" height="48" src="https://avatars.githubusercontent.com/u/181782356?s=200&v=4" /> deskflow-active-session</h1>
+  <p>Deskflow across macOS user sessions <br /> Share one Mac's keyboard and mouse regardless of which account is active</p>
+</div>
 
-Run the Deskflow CLI server only for the active macOS desktop session.
+<p align="center">
+  <a href="https://github.com/qweritos/deskflow-active-session/releases"><img alt="Release" src="https://img.shields.io/github/v/release/qweritos/deskflow-active-session?style=flat-square" /></a>
+  <a href="https://github.com/qweritos/deskflow-active-session/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/qweritos/deskflow-active-session?style=flat-square" /></a>
+  <a href="https://github.com/qweritos/deskflow-active-session/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/qweritos/deskflow-active-session?style=flat-square" /></a>
+  <a href="https://github.com/qweritos/deskflow-active-session/forks"><img alt="Forks" src="https://img.shields.io/github/forks/qweritos/deskflow-active-session?style=flat-square" /></a>
+  <a href="https://github.com/qweritos/deskflow-active-session/issues"><img alt="Issues" src="https://img.shields.io/github/issues/qweritos/deskflow-active-session?style=flat-square" /></a>
+  <a href="https://github.com/qweritos/deskflow-active-session/commits/main"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/qweritos/deskflow-active-session?style=flat-square" /></a>
+</p>
+
+<br />
 
 ## Why
 
-This project was created for Macs shared by multiple local accounts where the keyboard and mouse connected to the Mac must remain available to another computer, regardless of which user is currently at the desktop.
+- Keep the keyboard and mouse connected to a shared Mac available to another computer after Fast User Switching.
+- Run the Deskflow CLI server only for the foreground macOS desktop session.
+- Preserve each account's default Deskflow configuration, screen layout, certificates, and TLS keys.
+- Avoid a TCP proxy, root daemon, or always-running Deskflow GUI.
 
-macOS Fast User Switching keeps background desktop sessions and their processes alive. Running Deskflow as a normal login item for every user can therefore leave multiple servers competing for TCP port 24800 and macOS input permissions. Running it as a system daemon is not a good substitute: Deskflow would lose the active user's home directory, GUI-session context, privacy authorization, and default configuration.
+macOS keeps background desktop sessions and their processes alive. Running Deskflow as a login item for every user can therefore leave multiple servers competing for TCP port 24800 and macOS input permissions.
 
-`deskflow-active-session` keeps a small supervisor in each participating GUI session, but runs the actual Deskflow server only for the foreground session. This makes the keyboard-and-mouse handoff follow the active macOS user while preserving each account's normal Deskflow settings.
-
-When Fast User Switching moves an account into the background, this utility stops that account's `deskflow-core` server. When the account becomes active again, it starts the server with that user's normal Deskflow configuration.
-
-There is no TCP proxy, system daemon, or Deskflow GUI process. Inactive accounts retain only a lightweight per-user supervisor.
-
-## Installation prerequisites
-
-Before running the installer:
-
-1. Use macOS 13 or newer and make sure every participating account is a local GUI user.
-2. Install the Xcode Command Line Tools. They provide the Swift toolchain used to build the supervisor:
-
-   ```sh
-   xcode-select --install
-   swift --version
-   ```
-
-3. Install Deskflow in `/Applications/Deskflow.app`. The recommended Homebrew installation is:
-
-   ```sh
-   brew tap deskflow/tap
-   brew install deskflow
-   ```
-
-   Alternatively, install the app from the [official Deskflow releases](https://github.com/deskflow/deskflow/releases). Confirm that its CLI core is available:
-
-   ```sh
-   test -x /Applications/Deskflow.app/Contents/MacOS/deskflow-core
-   ```
-
-4. Sign into every participating account, open Deskflow once, configure it in server mode, save the screen layout, then quit the GUI and disable any separate Deskflow login item.
-5. Use an administrator account to run the installer. It needs `sudo` to install the shared supervisor and each user's LaunchAgent.
-
-The initial implementation was tested on macOS 15.7.8 with Deskflow 1.26.0 on Intel. It builds natively on the Mac running the installer. macOS input permissions are configured [after installation](#macos-permissions), when the installed helper exists.
+`deskflow-active-session` keeps a lightweight supervisor in each participating GUI session. It stops that user's `deskflow-core` server when the session moves into the background and starts it again when the session becomes active.
 
 ## Install
 
-Build and install agents for the accounts:
+### Prerequisites
 
-```sh
+Before installing:
+
+- Use macOS 13 or newer.
+- Make sure every participating account is a local GUI user.
+- Have administrator access for the shared binary and per-user LaunchAgents.
+
+Install the Xcode Command Line Tools, which provide the Swift toolchain used to build the supervisor:
+
+```bash
+xcode-select --install
+swift --version
+```
+
+Install Deskflow with Homebrew:
+
+```bash
+brew tap deskflow/tap
+brew install deskflow
+```
+
+Alternatively, install the app from the [official Deskflow releases](https://github.com/deskflow/deskflow/releases).
+
+Confirm that the Deskflow CLI core is available:
+
+```bash
+test -x /Applications/Deskflow.app/Contents/MacOS/deskflow-core
+```
+
+Finally, sign into every participating account and:
+
+- Open Deskflow once.
+- Configure it in server mode and save the screen layout.
+- Quit the GUI and disable any separate Deskflow login item.
+
+### Install the supervisor
+
+Clone the repository and name every participating account:
+
+```bash
 git clone https://github.com/qweritos/deskflow-active-session.git
 cd deskflow-active-session
 ./scripts/install.sh alice alice-work
 ```
 
-The installer requests administrator access, compiles and ad-hoc signs one shared supervisor, then installs a LaunchAgent for each named account. Run the same command to upgrade.
+The installer requests administrator access, builds and ad-hoc signs one shared supervisor, then installs a LaunchAgent for each named account. Run the same command again to upgrade.
+
+### Install options
 
 Validate the build, account lookup, signature, and generated plist without installing:
 
-```sh
+```bash
 ./scripts/install.sh --dry-run alice alice-work
 ```
 
-A custom Deskflow installation is supported through an environment variable:
+Use a custom Deskflow installation path:
 
-```sh
+```bash
 DESKFLOW_CORE=/custom/path/deskflow-core ./scripts/install.sh alice alice-work
 ```
 
 ## macOS permissions
 
-The helper launches `deskflow-core`, so macOS may attribute input-access requests to the helper rather than to the Deskflow GUI. Add this exact installed binary to **System Settings → Privacy & Security → Accessibility** and **Input Monitoring** if prompted:
+The helper launches `deskflow-core`, so macOS may attribute input-access requests to the helper instead of the Deskflow GUI. Add this exact installed binary to **System Settings → Privacy & Security → Accessibility** and **Input Monitoring** if prompted:
 
 ```text
 /usr/local/libexec/deskflow-session-supervisor
 ```
 
-Local builds use a stable ad-hoc designated identifier at a root-protected path. A first migration from a differently signed build—or some macOS updates—can still leave an old permission toggle looking enabled while macOS rejects the installed binary. If that happens:
+> **Important:** Enabling only the Deskflow GUI may leave the CLI server unauthorized. Grant permissions to the exact helper path above.
+
+If a permission toggle looks enabled but macOS still rejects the helper:
 
 1. Remove the old helper entry from the privacy list.
 2. Add the exact installed path again. Press `Command-Shift-G` in the file picker to enter it.
@@ -85,17 +108,17 @@ Local builds use a stable ad-hoc designated identifier at a root-protected path.
 
 The installer never modifies the macOS privacy database.
 
-For distributed builds, set `CODESIGN_IDENTITY` to a Developer ID Application identity. Developer ID signing and notarization are preferable to local ad-hoc signing.
+Local builds use a stable ad-hoc designated identifier at a root-protected path. A first migration from a differently signed build—or some macOS updates—may still require the helper to be removed and re-added. For distributed builds, set `CODESIGN_IDENTITY` to a Developer ID Application identity.
 
 ## Deskflow configuration
 
 With no override, the supervisor runs:
 
-```sh
+```bash
 /Applications/Deskflow.app/Contents/MacOS/deskflow-core server
 ```
 
-Deskflow therefore loads each user's default settings and server layout:
+Deskflow loads each user's default settings and server layout:
 
 ```text
 ~/Library/Deskflow/Deskflow.conf
@@ -104,7 +127,7 @@ Deskflow therefore loads each user's default settings and server layout:
 
 The installer does not copy or alter user configuration, screen layouts, certificates, or TLS keys. Screen placement can intentionally differ between accounts, so confirm the configured exit edge in each layout.
 
-The supervisor also supports optional command-line overrides:
+Optional supervisor arguments:
 
 ```text
 --core PATH
@@ -115,9 +138,13 @@ The supervisor also supports optional command-line overrides:
 
 Run `deskflow-session-supervisor --help` for the complete interface.
 
-## Status and restart
+## Usage
 
-```sh
+### Status
+
+Check every participating account:
+
+```bash
 ./scripts/status.sh alice alice-work
 ```
 
@@ -131,12 +158,16 @@ alice-work             running      stopped      stopped
 
 Only the active console user should own Deskflow's listening port.
 
+### Restart
+
 Restart the active account, or name one explicitly:
 
-```sh
+```bash
 ./scripts/restart.sh
 ./scripts/restart.sh alice
 ```
+
+### Logs
 
 Logs are stored per user:
 
@@ -149,17 +180,17 @@ Logs are stored per user:
 
 Remove selected accounts:
 
-```sh
+```bash
 ./scripts/uninstall.sh alice alice-work
 ```
 
-To explicitly discover and remove all agents installed under local user accounts:
+Discover and remove all LaunchAgents installed under local user accounts:
 
-```sh
+```bash
 ./scripts/uninstall.sh --all
 ```
 
-It does not remove Deskflow, user configuration, certificates, logs, or macOS privacy decisions.
+This does not remove Deskflow, user configuration, certificates, logs, or macOS privacy decisions.
 
 ## How it works
 
@@ -182,21 +213,31 @@ The supervisor stays inside each user's GUI bootstrap session, so Deskflow recei
 - The login window, SSH sessions, and non-console sessions are not served.
 - A forced shutdown can leave the port unavailable briefly; the supervisor retries automatically.
 - Full Fast User Switching behavior requires manual testing on a two-user Mac.
-- Ad-hoc local signatures do not provide permission continuity across changed builds. A distributed release should use a stable Developer ID signature and notarization.
+- Ad-hoc local signatures do not provide permission continuity across changed builds. Distributed releases should use a stable Developer ID signature and notarization.
+
+## Tested environment
+
+| macOS | Arch | Deskflow | Status |
+| --- | --- | --- | --- |
+| macOS 15.7.8 | x86_64 | 1.26.0 | ✅ |
+
+The supervisor builds natively on the Mac running the installer.
 
 ## Development
 
 Build and run smoke checks without installing:
 
-```sh
+```bash
 make build
 make check
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) and [tests/manual-fast-user-switching.md](tests/manual-fast-user-switching.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [manual Fast User Switching test](tests/manual-fast-user-switching.md).
 
 ## License
 
-This project is available under the [MIT License](LICENSE).
+MIT. See [LICENSE](LICENSE).
 
-Deskflow is a separate project and is not bundled, linked, or redistributed here. This utility is independent and is not an official Deskflow project.
+## Disclaimer
+
+This project is independent and is not affiliated with or endorsed by [Deskflow](https://github.com/deskflow/deskflow). Deskflow is not bundled, linked, or redistributed here.
