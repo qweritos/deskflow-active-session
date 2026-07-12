@@ -2,6 +2,14 @@
 
 Run the Deskflow CLI server only for the active macOS desktop session.
 
+## Why
+
+This project was created for Macs shared by multiple local accounts where the keyboard and mouse connected to the Mac must remain available to another computer, regardless of which user is currently at the desktop.
+
+macOS Fast User Switching keeps background desktop sessions and their processes alive. Running Deskflow as a normal login item for every user can therefore leave multiple servers competing for TCP port 24800 and macOS input permissions. Running it as a system daemon is not a good substitute: Deskflow would lose the active user's home directory, GUI-session context, privacy authorization, and default configuration.
+
+`deskflow-active-session` keeps a small supervisor in each participating GUI session, but runs the actual Deskflow server only for the foreground session. This makes the keyboard-and-mouse handoff follow the active macOS user while preserving each account's normal Deskflow settings.
+
 When Fast User Switching moves an account into the background, this utility stops that account's `deskflow-core` server. When the account becomes active again, it starts the server with that user's normal Deskflow configuration.
 
 There is no TCP proxy, system daemon, or Deskflow GUI process. Inactive accounts retain only a lightweight per-user supervisor.
