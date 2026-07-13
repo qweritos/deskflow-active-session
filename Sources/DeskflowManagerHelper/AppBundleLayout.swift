@@ -1,6 +1,7 @@
 import Darwin
 import DeskflowManagerCore
 import Foundation
+import MachO
 import Security
 
 struct AppBundleLayout {
@@ -10,12 +11,12 @@ struct AppBundleLayout {
   let appDesignatedRequirement: String
 
   init() throws {
-    var executable = URL(fileURLWithPath: CommandLine.arguments[0])
-      .standardizedFileURL
-    guard executable.lastPathComponent == ManagerConstants.helperExecutableName else {
+    let invokedHelper = try Self.executableURL()
+    guard invokedHelper.lastPathComponent == ManagerConstants.helperExecutableName else {
       throw ManagerBackendError.invalidPayload("Manager helper executable name is unexpected.")
     }
 
+    var executable = invokedHelper
     for _ in 0..<3 {
       executable.deleteLastPathComponent()
     }
@@ -35,7 +36,6 @@ struct AppBundleLayout {
       .appendingPathComponent("Contents/MacOS", isDirectory: true)
       .appendingPathComponent(ManagerConstants.helperExecutableName)
       .standardizedFileURL
-    let invokedHelper = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL
     guard expectedHelper.path == invokedHelper.path else {
       throw ManagerBackendError.invalidPayload("Manager helper path is unexpected.")
     }
@@ -65,6 +65,35 @@ struct AppBundleLayout {
     supervisorPayload = capturedPayload.data
     supervisorDesignatedRequirement = capturedPayload.requirement
     appDesignatedRequirement = capturedPayload.appRequirement
+  }
+
+  private static func executableURL() throws -> URL {
+    var size: UInt32 = 0
+    _ = _NSGetExecutablePath(nil, &size)
+    guard size > 1, size <= UInt32(PATH_MAX * 4) else {
+      throw ManagerBackendError.invalidPayload(
+        "Could not determine the manager helper executable path."
+      )
+    }
+
+    var buffer = [CChar](repeating: 0, count: Int(size))
+    let result = buffer.withUnsafeMutableBufferPointer { pointer in
+      _NSGetExecutablePath(pointer.baseAddress, &size)
+    }
+    guard result == 0 else {
+      throw ManagerBackendError.invalidPayload(
+        "Could not determine the manager helper executable path."
+      )
+    }
+
+    let reportedPath = String(cString: buffer)
+    guard let resolvedPath = Darwin.realpath(reportedPath, nil) else {
+      throw ManagerBackendError.invalidPayload(
+        "Could not resolve the manager helper executable path."
+      )
+    }
+    defer { Darwin.free(resolvedPath) }
+    return URL(fileURLWithPath: String(cString: resolvedPath)).standardizedFileURL
   }
 
   private static func capturePayload(

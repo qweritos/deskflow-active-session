@@ -83,6 +83,8 @@ The installer requests administrator access, builds and ad-hoc signs one shared 
 
 ### GUI manager
 
+![Deskflow Active Session Manager with the Event Log expanded](docs/images/manager-window.png)
+
 The optional native manager is built from source. A functional local build requires full Xcode and a usable Apple Development signing identity; an ad-hoc build is an interface preview only. Distributed builds require Developer ID signing and notarization.
 
 Confirm that a signing identity is available:
@@ -100,6 +102,8 @@ Build, sign, install, and open the native manager:
 The script stages and verifies a root-owned app in a protected system directory, then atomically exchanges it into `/Applications`. It does not notarize or staple the build. On first launch, select **Set Up Helper**. If macOS requests approval, enable the manager in **System Settings → General → Login Items**, return to the app, select the participating accounts, and choose **Install / Upgrade**.
 
 The management helper installs and controls the CLI supervisor. It never executes `deskflow-core` directly and never receives Accessibility or Input Monitoring access.
+
+Expand **Event Log** at the bottom of the manager to inspect recent lifecycle, helper, refresh, selection, and operation events. The bounded log can be copied for troubleshooting or cleared in place; administrator authorization data is never recorded.
 
 See the [GUI manager guide](docs/gui-manager.md) for signing, universal builds, helper approval, upgrades, and removal.
 

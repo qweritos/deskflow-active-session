@@ -1,11 +1,13 @@
 import AppKit
 import DeskflowManagerCore
 import Foundation
+import OSLog
 import ServiceManagement
 
 enum HelperSetupState: Equatable {
   case checking
   case working(String)
+  case installationRequired
   case enabled
   case notRegistered
   case requiresApproval
@@ -27,21 +29,48 @@ struct PresentedManagerError: Identifiable {
 @MainActor
 final class ManagerModel: ObservableObject {
   @Published private(set) var snapshot: SystemSnapshot?
-  @Published private(set) var helperState: HelperSetupState = .checking
+  @Published private(set) var helperState: HelperSetupState = .checking {
+    didSet {
+      guard helperState != oldValue else { return }
+      recordEvent("Helper state: \(helperState.logDescription)")
+    }
+  }
   @Published private(set) var helperVersion: String?
   @Published private(set) var isRefreshing = false
   @Published private(set) var activeOperation: ManagerOperation?
   @Published private(set) var operationStatus = ""
   @Published private(set) var lastOperationResponse: OperationResponse?
+  @Published private(set) var eventLog: [ManagerLogEntry] = []
   @Published private(set) var hasUnknownMutationOutcome = false {
     didSet {
       defaults.set(hasUnknownMutationOutcome, forKey: unknownOutcomeDefaultsKey)
+      if hasUnknownMutationOutcome != oldValue {
+        recordEvent(
+          hasUnknownMutationOutcome
+            ? "Operation outcome marked unknown"
+            : "Unknown operation outcome cleared",
+          level: hasUnknownMutationOutcome ? .warning : .info
+        )
+      }
     }
   }
   @Published var selectedUserIDs: Set<UInt32> = [] {
-    didSet { persistSelection() }
+    didSet {
+      persistSelection()
+      if selectedUserIDs != oldValue {
+        recordEvent(
+          "Selection: \(selectedUserIDs.sorted().map(String.init).joined(separator: ", "))"
+        )
+      }
+    }
   }
-  @Published var presentedError: PresentedManagerError?
+  @Published var presentedError: PresentedManagerError? {
+    didSet {
+      if oldValue != nil, presentedError == nil {
+        recordEvent("Error dialog dismissed", level: .debug)
+      }
+    }
+  }
 
   private let client: HelperClient
   private let service: SMAppService
@@ -52,6 +81,14 @@ final class ManagerModel: ObservableObject {
   private var refreshGeneration = 0
   private var helperGeneration = 0
   private var hasStoredSelection = false
+  private var nextLogEntryID: UInt64 = 1
+  private let systemLogger = Logger(
+    subsystem: ManagerConstants.appBundleIdentifier,
+    category: "manager-events"
+  )
+
+  private static let maximumLogEntries = 500
+  private static let maximumLogMessageCharacters = 2_048
 
   init(
     client: HelperClient = HelperClient(),
@@ -62,6 +99,9 @@ final class ManagerModel: ObservableObject {
     service = SMAppService.daemon(plistName: ManagerConstants.helperPlistName)
     restoreSelection()
     hasUnknownMutationOutcome = defaults.bool(forKey: unknownOutcomeDefaultsKey)
+    recordEvent(
+      "Manager initialized (version \(ManagerConstants.managerVersion), bundle \(Bundle.main.bundleURL.standardizedFileURL.path))"
+    )
   }
 
   deinit {
@@ -70,10 +110,61 @@ final class ManagerModel: ObservableObject {
     helperCheckTask?.cancel()
   }
 
+  func recordInterfaceEvent(_ message: String) {
+    recordEvent(message, level: .debug)
+  }
+
+  func copyEventLog() {
+    let contents = eventLog.map(\.exportLine).joined(separator: "\n")
+    let pasteboard = NSPasteboard.general
+    pasteboard.clearContents()
+    pasteboard.setString(contents, forType: .string)
+    recordEvent("Event log copied to clipboard")
+  }
+
+  func clearEventLog() {
+    eventLog.removeAll(keepingCapacity: true)
+    recordEvent("Event log cleared")
+  }
+
   var localDeskflowCoreAvailable: Bool {
     FileManager.default.isExecutableFile(
       atPath: ManagerConstants.deskflowCorePath
     )
+  }
+
+  private func recordEvent(
+    _ message: String,
+    level: ManagerLogLevel = .info
+  ) {
+    let singleLine = message
+      .split(whereSeparator: \Character.isNewline)
+      .joined(separator: " ⏎ ")
+    let boundedMessage = String(
+      singleLine.prefix(Self.maximumLogMessageCharacters)
+    )
+    let entry = ManagerLogEntry(
+      id: nextLogEntryID,
+      timestamp: Date(),
+      level: level,
+      message: boundedMessage
+    )
+    nextLogEntryID &+= 1
+    if eventLog.count >= Self.maximumLogEntries {
+      eventLog.removeFirst(eventLog.count - Self.maximumLogEntries + 1)
+    }
+    eventLog.append(entry)
+
+    switch level {
+    case .debug:
+      systemLogger.debug("\(boundedMessage, privacy: .public)")
+    case .info:
+      systemLogger.info("\(boundedMessage, privacy: .public)")
+    case .warning:
+      systemLogger.warning("\(boundedMessage, privacy: .public)")
+    case .error:
+      systemLogger.error("\(boundedMessage, privacy: .public)")
+    }
   }
 
   var selectedUsers: [UserStatus] {
@@ -119,10 +210,14 @@ final class ManagerModel: ObservableObject {
   }
 
   func start() {
+    recordEvent(
+      "Application started; Deskflow core \(localDeskflowCoreAvailable ? "available" : "missing")"
+    )
     updateHelperState(refreshWhenEnabled: true)
   }
 
   func applicationDidBecomeActive() {
+    recordEvent("Application became active", level: .debug)
     updateHelperState(refreshWhenEnabled: snapshot == nil)
   }
 
@@ -130,9 +225,21 @@ final class ManagerModel: ObservableObject {
     helperGeneration += 1
     let generation = helperGeneration
     helperCheckTask?.cancel()
-    switch service.status {
+    let serviceStatus = service.status
+    recordEvent(
+      "Checking helper registration: \(serviceStatus.logDescription); refresh when enabled: \(refreshWhenEnabled)"
+    )
+    guard isRunningFromInstalledApplication else {
+      cancelRefresh()
+      helperVersion = nil
+      helperState = .installationRequired
+      return
+    }
+    switch serviceStatus {
     case .enabled:
-      helperState = .enabled
+      // Do not allow a status request until the helper has proved that it can
+      // launch and that its protocol version matches this manager.
+      helperState = .checking
       verifyHelperAndRefresh(
         generation: generation,
         refreshWhenEnabled: refreshWhenEnabled
@@ -157,13 +264,23 @@ final class ManagerModel: ObservableObject {
   }
 
   func setUpHelper() {
-    guard activeOperation == nil else { return }
+    guard activeOperation == nil else {
+      recordEvent("Helper setup ignored while an operation is active", level: .warning)
+      return
+    }
+    guard isRunningFromInstalledApplication else {
+      recordEvent("Helper setup blocked outside /Applications", level: .warning)
+      helperState = .installationRequired
+      return
+    }
+    recordEvent("Registering management helper")
     cancelHelperCheck()
     cancelRefresh()
     helperState = .working("Registering manager helper…")
     Task {
       do {
         try service.register()
+        recordEvent("Management helper registration request succeeded")
         updateHelperState(refreshWhenEnabled: true)
       } catch {
         updateHelperState()
@@ -173,7 +290,16 @@ final class ManagerModel: ObservableObject {
   }
 
   func repairHelper() {
-    guard activeOperation == nil, !hasUnknownMutationOutcome else { return }
+    guard activeOperation == nil, !hasUnknownMutationOutcome else {
+      recordEvent("Helper repair ignored while changes are unresolved", level: .warning)
+      return
+    }
+    guard isRunningFromInstalledApplication else {
+      recordEvent("Helper repair blocked outside /Applications", level: .warning)
+      helperState = .installationRequired
+      return
+    }
+    recordEvent("Repairing management helper")
     cancelHelperCheck()
     cancelRefresh()
     helperState = .working("Repairing manager helper…")
@@ -187,7 +313,9 @@ final class ManagerModel: ObservableObject {
         } else if service.status != .notRegistered {
           try await unregisterService()
         }
+        recordEvent("Previous management helper registration removed", level: .debug)
         try service.register()
+        recordEvent("Management helper re-registered")
         updateHelperState(refreshWhenEnabled: true)
       } catch {
         updateHelperState()
@@ -197,7 +325,11 @@ final class ManagerModel: ObservableObject {
   }
 
   func removeManagementHelper() {
-    guard canRemoveManagementHelper else { return }
+    guard canRemoveManagementHelper else {
+      recordEvent("Helper removal ignored because it is currently unavailable", level: .warning)
+      return
+    }
+    recordEvent("Removing management helper")
     cancelHelperCheck()
     cancelRefresh()
     helperState = .working("Removing management helper…")
@@ -208,6 +340,7 @@ final class ManagerModel: ObservableObject {
         }
         helperVersion = nil
         helperState = .notRegistered
+        recordEvent("Management helper removed")
       } catch {
         updateHelperState()
         showError(title: "Could not remove management helper", error: error)
@@ -216,11 +349,20 @@ final class ManagerModel: ObservableObject {
   }
 
   func openLoginItemSettings() {
+    recordEvent("Opening Login Items settings")
     SMAppService.openSystemSettingsLoginItems()
+  }
+
+  func openApplicationsFolder() {
+    recordEvent("Opening Applications folder")
+    NSWorkspace.shared.open(
+      URL(fileURLWithPath: "/Applications", isDirectory: true)
+    )
   }
 
   func refresh() {
     guard helperState.allowsStatus else {
+      recordEvent("Refresh requested while helper is unavailable", level: .warning)
       updateHelperState()
       return
     }
@@ -229,27 +371,39 @@ final class ManagerModel: ObservableObject {
     let generation = refreshGeneration
     refreshTask?.cancel()
     isRefreshing = true
+    recordEvent("Status refresh started (request \(generation))")
     refreshTask = Task {
+      defer {
+        if generation == refreshGeneration {
+          isRefreshing = false
+          refreshTask = nil
+        }
+      }
       do {
         let newSnapshot = try await client.snapshot()
         guard !Task.isCancelled, generation == refreshGeneration else { return }
         apply(newSnapshot)
         hasUnknownMutationOutcome = false
+        recordEvent("Status refresh completed (request \(generation))")
       } catch is CancellationError {
-        // A newer refresh owns the visible state.
+        recordEvent("Status refresh cancelled (request \(generation))", level: .debug)
       } catch {
         guard generation == refreshGeneration else { return }
+        recordEvent(
+          "Status refresh failed (request \(generation)): \(error.localizedDescription)",
+          level: .error
+        )
         classifyConnectionFailure(error)
         showError(title: "Status refresh failed", error: error)
-      }
-      if generation == refreshGeneration {
-        isRefreshing = false
       }
     }
   }
 
   func selectAll() {
-    guard let snapshot else { return }
+    guard let snapshot else {
+      recordEvent("Select All ignored before status was loaded", level: .warning)
+      return
+    }
     selectedUserIDs = Set(
       snapshot.users.lazy
         .filter { $0.account.isEligible || $0.isInstalled }
@@ -267,6 +421,10 @@ final class ManagerModel: ObservableObject {
       selectedUserIDs.remove(uid)
     } else {
       guard selectedUserIDs.count < ManagerConstants.maximumSelectedUsers else {
+        recordEvent(
+          "Selection limit reached while adding uid \(uid)",
+          level: .warning
+        )
         presentedError = PresentedManagerError(
           title: "Selection limit reached",
           message:
@@ -291,14 +449,17 @@ final class ManagerModel: ObservableObject {
   }
 
   func dismissResults() {
+    recordEvent("Operation results dismissed", level: .debug)
     lastOperationResponse = nil
   }
 
   func openAccessibilitySettings() {
+    recordEvent("Opening Accessibility settings")
     openPrivacyPane("Privacy_Accessibility")
   }
 
   func openInputMonitoringSettings() {
+    recordEvent("Opening Input Monitoring settings")
     openPrivacyPane("Privacy_ListenEvent")
   }
 
@@ -306,12 +467,18 @@ final class ManagerModel: ObservableObject {
     generation: Int,
     refreshWhenEnabled: Bool
   ) {
+    recordEvent("Verifying management helper version", level: .debug)
     helperCheckTask = Task {
       do {
         let version = try await client.version()
         guard !Task.isCancelled, generation == helperGeneration else { return }
         helperVersion = version
+        recordEvent("Management helper replied with version \(version)")
         guard version == ManagerConstants.managerVersion else {
+          recordEvent(
+            "Management helper version mismatch: expected \(ManagerConstants.managerVersion), received \(version)",
+            level: .warning
+          )
           helperState = .repairRequired(
             "Installed helper version \(version) does not match manager version \(ManagerConstants.managerVersion)."
           )
@@ -323,14 +490,28 @@ final class ManagerModel: ObservableObject {
         }
       } catch {
         guard !Task.isCancelled, generation == helperGeneration else { return }
+        recordEvent(
+          "Management helper verification failed: \(error.localizedDescription)",
+          level: .error
+        )
         classifyConnectionFailure(error)
       }
     }
   }
 
   private func perform(_ operation: ManagerOperation, userIDs: Set<UInt32>) {
-    guard canMutate else { return }
+    guard canMutate else {
+      recordEvent(
+        "\(operation.rawValue.capitalized) request ignored while changes are unavailable",
+        level: .warning
+      )
+      return
+    }
     guard !userIDs.isEmpty else {
+      recordEvent(
+        "\(operation.rawValue.capitalized) request has no applicable users",
+        level: .warning
+      )
       presentedError = PresentedManagerError(
         title: "No applicable users selected",
         message: operation == .install
@@ -340,6 +521,10 @@ final class ManagerModel: ObservableObject {
       return
     }
     guard userIDs.count <= ManagerConstants.maximumSelectedUsers else {
+      recordEvent(
+        "\(operation.rawValue.capitalized) request exceeds the user limit",
+        level: .warning
+      )
       presentedError = PresentedManagerError(
         title: "Too many users selected",
         message:
@@ -348,19 +533,26 @@ final class ManagerModel: ObservableObject {
       return
     }
 
+    let targetDescription = userIDs.sorted().map(String.init).joined(separator: ", ")
+    recordEvent(
+      "\(operation.rawValue.capitalized) requested for uid(s): \(targetDescription)"
+    )
     activeOperation = operation
     cancelRefresh()
     operationStatus = "Requesting administrator authorization…"
+    recordEvent("Requesting administrator authorization for \(operation.rawValue)")
     lastOperationResponse = nil
     operationTask = Task {
       do {
         let authorization = try await Task.detached(priority: .userInitiated) {
           try AuthorizationProvider.externalForm()
         }.value
+        recordEvent("Administrator authorization received for \(operation.rawValue)")
         operationStatus = operation.progressDescription
         // Persist a conservative marker before sending the request. A process
         // exit or XPC interruption must not allow a second overlapping mutation.
         hasUnknownMutationOutcome = true
+        recordEvent("Dispatching \(operation.rawValue) request to management helper")
         let response = try await client.perform(
           operation: operation,
           userIDs: userIDs,
@@ -370,10 +562,20 @@ final class ManagerModel: ObservableObject {
         lastOperationResponse = bounded(response)
         operationStatus = response.summary
         activeOperation = nil
+        recordEvent(
+          "\(operation.rawValue.capitalized) completed: \(response.summary)"
+        )
+        for result in response.results.prefix(ManagerConstants.maximumSelectedUsers) {
+          recordEvent(
+            "\(operation.rawValue.capitalized) result for \(result.userName) (uid \(result.uid)): \(result.succeeded ? "success" : "failure") — \(result.message)",
+            level: result.succeeded ? .info : .warning
+          )
+        }
         refresh()
       } catch is CancellationError {
         activeOperation = nil
         operationStatus = ""
+        recordEvent("\(operation.rawValue.capitalized) cancelled", level: .warning)
       } catch {
         activeOperation = nil
         operationStatus = ""
@@ -391,6 +593,10 @@ final class ManagerModel: ObservableObject {
           outcomeIsUnknown
           ? "Operation outcome is unknown"
           : "\(operation.displayName) failed"
+        recordEvent(
+          "\(operation.rawValue.capitalized) failed: \(error.localizedDescription)",
+          level: .error
+        )
         showError(
           title: title,
           error: error
@@ -401,7 +607,30 @@ final class ManagerModel: ObservableObject {
   }
 
   private func apply(_ newSnapshot: SystemSnapshot) {
+    let previousSnapshot = snapshot
     snapshot = newSnapshot
+    let activeUser = newSnapshot.activeUserName ?? "login window"
+    recordEvent(
+      "Snapshot: active desktop \(activeUser); users \(newSnapshot.users.count); TCP 24800 listeners \(newSnapshot.portListeners.count)"
+    )
+    if previousSnapshot?.activeUserName != newSnapshot.activeUserName {
+      recordEvent(
+        "Active desktop changed from \(previousSnapshot?.activeUserName ?? "login window") to \(activeUser)"
+      )
+    }
+    for user in newSnapshot.users {
+      let serverPIDs = user.serverPIDs.map(String.init).joined(separator: ",")
+      recordEvent(
+        "User \(user.account.name) (uid \(user.account.uid)): health=\(user.health.rawValue), supervisor=\(user.supervisorState.rawValue), supervisorPID=\(user.supervisorPID.map(String.init) ?? "none"), serverPIDs=\(serverPIDs.isEmpty ? "none" : serverPIDs)",
+        level: .debug
+      )
+    }
+    for listener in newSnapshot.portListeners {
+      recordEvent(
+        "TCP 24800 listener: uid \(listener.uid), pid \(listener.pid), command \(listener.command)",
+        level: .debug
+      )
+    }
     let visibleIDs = Set(newSnapshot.users.map { $0.account.uid })
     if hasStoredSelection {
       selectedUserIDs.formIntersection(visibleIDs)
@@ -418,6 +647,10 @@ final class ManagerModel: ObservableObject {
 
   private func classifyConnectionFailure(_ error: Error) {
     guard let clientError = error as? ManagerClientError else { return }
+    recordEvent(
+      "Classifying helper connection failure: \(clientError.localizedDescription)",
+      level: .warning
+    )
     if hasUnknownMutationOutcome {
       switch clientError {
       case .connection, .timedOut, .invalidReply, .oversizedReply:
@@ -443,12 +676,23 @@ final class ManagerModel: ObservableObject {
   }
 
   private func cancelHelperCheck() {
+    if helperCheckTask != nil {
+      recordEvent("Cancelling helper verification", level: .debug)
+    }
     helperGeneration += 1
     helperCheckTask?.cancel()
     helperCheckTask = nil
   }
 
+  private var isRunningFromInstalledApplication: Bool {
+    Bundle.main.bundleURL.standardizedFileURL.path
+      == ManagerConstants.managerAppPath
+  }
+
   private func cancelRefresh() {
+    if isRefreshing {
+      recordEvent("Cancelling active status refresh", level: .debug)
+    }
     refreshGeneration += 1
     refreshTask?.cancel()
     refreshTask = nil
@@ -485,6 +729,10 @@ final class ManagerModel: ObservableObject {
   }
 
   private func showError(title: String, error: Error) {
+    recordEvent(
+      "Displaying error “\(title)”: \(error.localizedDescription)",
+      level: .error
+    )
     presentedError = PresentedManagerError(
       title: title,
       message: String(error.localizedDescription.prefix(8_192))
@@ -500,6 +748,7 @@ final class ManagerModel: ObservableObject {
     }
     selectedUserIDs = Set(ids.sorted().prefix(ManagerConstants.maximumSelectedUsers))
     hasStoredSelection = true
+    recordEvent("Restored saved user selection", level: .debug)
   }
 
   private func persistSelection() {
@@ -514,7 +763,10 @@ final class ManagerModel: ObservableObject {
       let url = URL(
         string: "x-apple.systempreferences:com.apple.preference.security?\(pane)"
       )
-    else { return }
+    else {
+      recordEvent("Could not create System Settings URL for \(pane)", level: .error)
+      return
+    }
     NSWorkspace.shared.open(url)
   }
 
@@ -541,6 +793,33 @@ extension ManagerOperation {
     case .install: return "Installing or upgrading selected users…"
     case .restart: return "Restarting selected users…"
     case .uninstall: return "Uninstalling selected users…"
+    }
+  }
+}
+
+extension HelperSetupState {
+  fileprivate var logDescription: String {
+    switch self {
+    case .checking: return "checking"
+    case .working(let message): return "working — \(message)"
+    case .installationRequired: return "installation required"
+    case .enabled: return "enabled"
+    case .notRegistered: return "not registered"
+    case .requiresApproval: return "approval required"
+    case .notFound: return "not found"
+    case .repairRequired(let reason): return "repair required — \(reason)"
+    }
+  }
+}
+
+extension SMAppService.Status {
+  fileprivate var logDescription: String {
+    switch self {
+    case .notRegistered: return "not registered"
+    case .enabled: return "enabled"
+    case .requiresApproval: return "approval required"
+    case .notFound: return "not found"
+    @unknown default: return "unknown"
     }
   }
 }

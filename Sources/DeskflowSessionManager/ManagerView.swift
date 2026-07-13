@@ -6,6 +6,8 @@ struct ManagerView: View {
   @EnvironmentObject private var model: ManagerModel
   @State private var confirmation: ManagerConfirmation?
   @State private var hasStarted = false
+  @AppStorage("io.github.qweritos.deskflow-active-session.manager.log-expanded")
+  private var isEventLogExpanded = false
 
   var body: some View {
     VStack(spacing: 0) {
@@ -28,6 +30,8 @@ struct ManagerView: View {
 
       Divider()
       actionBar
+      Divider()
+      eventLogPanel
     }
     .frame(minWidth: 820, minHeight: 560)
     .onAppear {
@@ -130,6 +134,16 @@ struct ManagerView: View {
       ) {
         ProgressView().controlSize(.small)
       }
+    case .installationRequired:
+      ManagerBanner(
+        icon: "shippingbox",
+        color: .orange,
+        title: "Install the manager application",
+        message:
+          "The management helper can run only from \(ManagerConstants.managerAppPath). Run the project installer, then open the installed application."
+      ) {
+        Button("Show Applications") { model.openApplicationsFolder() }
+      }
     case .enabled:
       EmptyView()
     case .notRegistered:
@@ -190,11 +204,7 @@ struct ManagerView: View {
         title: "Deskflow CLI core is missing",
         message: ManagerConstants.deskflowCorePath
       ) {
-        Button("Show Applications") {
-          NSWorkspace.shared.open(
-            URL(fileURLWithPath: "/Applications", isDirectory: true)
-          )
-        }
+        Button("Show Applications") { model.openApplicationsFolder() }
       }
     }
   }
@@ -390,6 +400,85 @@ struct ManagerView: View {
     .padding(12)
   }
 
+  private var eventLogPanel: some View {
+    VStack(spacing: 0) {
+      HStack(spacing: 10) {
+        Button {
+          isEventLogExpanded.toggle()
+          model.recordInterfaceEvent(
+            "Event log \(isEventLogExpanded ? "expanded" : "collapsed")"
+          )
+        } label: {
+          HStack(spacing: 8) {
+            Image(
+              systemName: isEventLogExpanded
+                ? "chevron.down"
+                : "chevron.right"
+            )
+            .font(.caption.weight(.semibold))
+            Text("Event Log")
+              .font(.callout.weight(.semibold))
+            Text("\(model.eventLog.count)")
+              .font(.caption.monospacedDigit())
+              .foregroundStyle(.secondary)
+            if !isEventLogExpanded, let latest = model.eventLog.last {
+              Text(latest.message)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+            }
+          }
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+
+        if isEventLogExpanded {
+          Button("Copy") { model.copyEventLog() }
+            .buttonStyle(.link)
+          Button("Clear") { model.clearEventLog() }
+            .buttonStyle(.link)
+        }
+      }
+      .padding(.horizontal, 12)
+      .frame(height: 34)
+
+      if isEventLogExpanded {
+        Divider()
+        eventLogContents
+      }
+    }
+    .background(Color(nsColor: .controlBackgroundColor))
+  }
+
+  private var eventLogContents: some View {
+    ScrollViewReader { proxy in
+      ScrollView {
+        LazyVStack(alignment: .leading, spacing: 4) {
+          ForEach(model.eventLog) { entry in
+            ManagerEventLogRow(entry: entry)
+          }
+          Color.clear
+            .frame(height: 1)
+            .id(eventLogBottomID)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+      }
+      .frame(minHeight: 120, idealHeight: 180, maxHeight: 220)
+      .onAppear {
+        proxy.scrollTo(eventLogBottomID, anchor: .bottom)
+      }
+      .onChange(of: model.eventLog.last?.id) { _ in
+        proxy.scrollTo(eventLogBottomID, anchor: .bottom)
+      }
+    }
+  }
+
+  private var eventLogBottomID: String {
+    "manager-event-log-bottom"
+  }
+
   private var deskflowIsAvailable: Bool {
     model.snapshot?.deskflowCoreAvailable ?? model.localDeskflowCoreAvailable
   }
@@ -419,6 +508,48 @@ struct ManagerView: View {
       .foregroundStyle(.secondary)
       .frame(maxWidth: .infinity, minHeight: 100)
       .padding()
+  }
+}
+
+private struct ManagerEventLogRow: View {
+  let entry: ManagerLogEntry
+
+  var body: some View {
+    HStack(alignment: .firstTextBaseline, spacing: 8) {
+      Text(entry.timestamp.formatted(date: .omitted, time: .standard))
+        .foregroundStyle(.secondary)
+        .frame(width: 84, alignment: .leading)
+      Image(systemName: entry.level.symbolName)
+        .foregroundStyle(entry.level.color)
+        .frame(width: 12)
+      Text(entry.level.rawValue.uppercased())
+        .foregroundStyle(entry.level.color)
+        .frame(width: 58, alignment: .leading)
+      Text(entry.message)
+        .textSelection(.enabled)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    .font(.system(.caption, design: .monospaced))
+  }
+}
+
+extension ManagerLogLevel {
+  fileprivate var symbolName: String {
+    switch self {
+    case .debug: return "circle.fill"
+    case .info: return "info.circle.fill"
+    case .warning: return "exclamationmark.triangle.fill"
+    case .error: return "xmark.octagon.fill"
+    }
+  }
+
+  fileprivate var color: Color {
+    switch self {
+    case .debug: return .secondary
+    case .info: return .blue
+    case .warning: return .orange
+    case .error: return .red
+    }
   }
 }
 

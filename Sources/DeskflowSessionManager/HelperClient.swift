@@ -93,19 +93,22 @@ final class HelperClient: @unchecked Sendable {
   private static let maximumSnapshotBytes = 2 * 1_024 * 1_024
   private static let maximumOperationBytes = 1 * 1_024 * 1_024
   private static let maximumErrorCharacters = 8_192
+  private let versionTimeout: TimeInterval
   private let readTimeout: TimeInterval
   private let mutationTimeout: TimeInterval
 
   init(
+    versionTimeout: TimeInterval = 10,
     readTimeout: TimeInterval = 60,
     mutationTimeout: TimeInterval = 600
   ) {
+    self.versionTimeout = versionTimeout
     self.readTimeout = readTimeout
     self.mutationTimeout = mutationTimeout
   }
 
   func version() async throws -> String {
-    try await call(timeout: readTimeout) { proxy, finish in
+    try await call(timeout: versionTimeout) { proxy, finish in
       proxy.version { version in
         finish(.success(String(version.prefix(256))))
       }

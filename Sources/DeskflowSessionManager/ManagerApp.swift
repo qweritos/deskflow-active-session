@@ -45,6 +45,15 @@ struct DeskflowSessionManagerApp: App {
       dispatchMain()
     }
     if arguments == ["--register-helper"] {
+      guard Bundle.main.bundleURL.standardizedFileURL.path
+        == ManagerConstants.managerAppPath
+      else {
+        fputs(
+          "Install the manager at \(ManagerConstants.managerAppPath) before registering its helper.\n",
+          stderr
+        )
+        Darwin.exit(EX_CONFIG)
+      }
       let service = SMAppService.daemon(
         plistName: ManagerConstants.helperPlistName
       )

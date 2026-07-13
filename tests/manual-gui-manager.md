@@ -23,6 +23,8 @@ Before testing:
 5. Confirm status refreshes without an administrator authorization dialog.
 6. Confirm service accounts and accounts with disabled login shells cannot be selected.
 7. Cancel one administrator authorization request and confirm no installation state changes.
+8. Expand **Event Log** at the bottom of the window and confirm startup, helper verification, and refresh events are present.
+9. Confirm **Copy** places the visible log on the clipboard and **Clear** resets it to a single clear event.
 
 ## Install and status
 
