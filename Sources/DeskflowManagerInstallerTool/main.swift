@@ -1,7 +1,7 @@
 import Darwin
 import Foundation
 
-private let applicationName = "Deskflow Active Session Manager.app"
+private let applicationName = "Deskflow ASM.app"
 private let canonicalPath = "/Applications/\(applicationName)"
 private let stagePrefix = "staging."
 private let operationLockPath = "/var/run/deskflow-active-session-manager.lock"

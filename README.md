@@ -85,7 +85,9 @@ The installer requests administrator access, builds and ad-hoc signs one shared 
 
 ![Deskflow Active Session Manager with the Event Log expanded](docs/images/manager-window.png)
 
-The optional native manager is built from source. A functional local build requires full Xcode and a usable Apple Development signing identity; an ad-hoc build is an interface preview only. Distributed builds require Developer ID signing and notarization.
+Download the DMG for your Mac from [Releases](https://github.com/qweritos/deskflow-active-session/releases), open it, and drag **Deskflow ASM** onto the **Applications** shortcut. Intel (`x86_64`) and Apple-silicon (`arm64`) images are published separately with SHA-256 checksums.
+
+The current CI artifacts are ad-hoc signed and not notarized, so they are intended for testing. A public production build requires Developer ID signing and notarization. For a functional secure local installation, build from source with full Xcode and a usable Apple Development identity.
 
 Confirm that a signing identity is available:
 
@@ -254,7 +256,7 @@ The optional GUI registers an on-demand, management-only LaunchDaemon through ma
 - A forced shutdown can leave the port unavailable briefly; the supervisor retries automatically.
 - Full Fast User Switching behavior requires manual testing on a two-user Mac.
 - Ad-hoc local signatures do not provide permission continuity across changed builds. Distributed releases should use a stable Developer ID signature and notarization.
-- GUI helper registration requires a properly signed app in `/Applications`. Public GUI builds must also be notarized.
+- The GUI helper requires the canonical, securely owned app in `/Applications`. Public GUI builds also need Developer ID signing and notarization.
 
 ## Tested environment
 

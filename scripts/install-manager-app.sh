@@ -11,7 +11,7 @@ if [[ -z ${DESKFLOW_MANAGER_INSTALL_LOCKED:-} ]]; then
   exec /usr/bin/lockf -k -t 0 \
     "$ROOT_DIR/.build/manager-install.lock" "$0" "$@"
 fi
-readonly APP_NAME="Deskflow Active Session Manager.app"
+readonly APP_NAME="Deskflow ASM.app"
 readonly MANAGER_NAME="Deskflow Active Session Manager"
 readonly BUILD_APP="$ROOT_DIR/.build/$APP_NAME"
 readonly INSTALL_APP="/Applications/$APP_NAME"
@@ -258,10 +258,10 @@ trap 'handle_signal 143' TERM
 }
 
 if /usr/bin/pgrep -f \
-  '/Applications/Deskflow Active Session Manager[.]app/Contents/MacOS/Deskflow Active Session Manager' \
+  '/Applications/Deskflow ASM[.]app/Contents/MacOS/Deskflow Active Session Manager' \
   >/dev/null 2>&1
 then
-  print -u2 "Quit Deskflow Active Session Manager in every user session before upgrading it."
+  print -u2 "Quit Deskflow ASM in every user session before upgrading it."
   exit 75
 fi
 

@@ -10,6 +10,11 @@ deskflow-session-supervisor → deskflow-core server
 
 ## Build and install
 
+Release DMGs contain **Deskflow ASM.app** and an **Applications** shortcut for
+drag-and-drop installation. Intel (`x86_64`) and Apple-silicon (`arm64`) builds
+are published separately. The current CI artifacts are ad-hoc signed and not
+notarized, so use them for testing only.
+
 Source builds require full Xcode and a usable Apple Development or Developer ID signing identity:
 
 ```bash
@@ -48,7 +53,7 @@ Build without copying the app:
 
 ```bash
 make manager
-open ".build/Deskflow Active Session Manager.app"
+open ".build/Deskflow ASM.app"
 ```
 
 Set `ARCHS` to build more than one architecture:
@@ -57,7 +62,7 @@ Set `ARCHS` to build more than one architecture:
 ARCHS="x86_64 arm64" make manager
 ```
 
-An ad-hoc build can display the interface but cannot register its privileged management service. Local functional builds need an Apple Development identity. Publicly distributed builds need Developer ID signing and notarization. The source build scripts do not notarize or staple the app.
+Ad-hoc builds are for local testing only: they lack Gatekeeper trust and signature continuity, and the helper requires the app to be installed root-owned by the source installer. Publicly distributed builds need Developer ID signing and notarization. The source build scripts do not notarize or staple the app.
 
 If verification reports `CSSMERR_TP_CERT_REVOKED`, renew the Apple Development
 certificate in **Xcode → Settings → Accounts → Manage Certificates**, then
@@ -105,7 +110,7 @@ For complete GUI removal:
 
 1. Use **Uninstall** for every managed account if the session supervisor is no longer needed.
 2. Select **Remove Management Helper**.
-3. Quit the manager and delete `/Applications/Deskflow Active Session Manager.app`.
+3. Quit the manager and delete `/Applications/Deskflow ASM.app`.
 
 Removing the manager does not delete Deskflow settings, certificates, TLS keys, logs, or macOS privacy decisions.
 

@@ -27,7 +27,7 @@ plutil -lint "$ROOT_DIR"/packaging/*.plist >/dev/null
 
 CODESIGN_IDENTITY=- ARCHS=$(uname -m) \
   "$ROOT_DIR/scripts/build-manager-app.sh" >/dev/null
-readonly MANAGER_APP="$ROOT_DIR/.build/Deskflow Active Session Manager.app"
+readonly MANAGER_APP="$ROOT_DIR/.build/Deskflow ASM.app"
 readonly MANAGER_CONTENTS="$MANAGER_APP/Contents"
 [[ -x "$MANAGER_CONTENTS/MacOS/Deskflow Active Session Manager" ]]
 [[ -x "$MANAGER_CONTENTS/MacOS/deskflow-manager-helper" ]]

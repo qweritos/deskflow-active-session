@@ -1,0 +1,111 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to build and publish
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build ${{ matrix.display_name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            arch: x86_64
+            display_name: Intel
+            file_label: Intel-x86_64
+          - runner: macos-15
+            arch: arm64
+            display_name: Apple silicon
+            file_label: Apple-Silicon-arm64
+    runs-on: ${{ matrix.runner }}
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+
+      - name: Verify release version
+        run: |
+          version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' packaging/DeskflowManager-Info.plist)
+          test "$RELEASE_TAG" = "v$version"
+          test "$(uname -m)" = "${{ matrix.arch }}"
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+
+      - name: Test
+        run: make check
+
+      - name: Build architecture-specific app
+        env:
+          ARCHS: ${{ matrix.arch }}
+          CODESIGN_IDENTITY: "-"
+        run: ./scripts/build-manager-app.sh
+
+      - name: Create drag-and-drop DMG
+        run: |
+          mkdir -p dist
+          dmg="dist/Deskflow-ASM-$VERSION-macOS-${{ matrix.file_label }}.dmg"
+          ./scripts/create-dmg.sh --arch "${{ matrix.arch }}" --output "$dmg"
+          ./scripts/verify-dmg.sh "$dmg" "${{ matrix.arch }}"
+          filename=$(basename "$dmg")
+          (cd dist && shasum -a 256 "$filename" > "$filename.sha256")
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dmg-${{ matrix.arch }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Download DMGs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: dmg-*
+          path: dist
+          merge-multiple: true
+
+      - name: Verify release assets
+        run: |
+          test "$(find dist -maxdepth 1 -name '*.dmg' -type f | wc -l)" -eq 2
+          test "$(find dist -maxdepth 1 -name '*.sha256' -type f | wc -l)" -eq 2
+          (cd dist && sha256sum -c ./*.sha256)
+
+      - name: Publish release
+        run: |
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" dist/* --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$RELEASE_TAG" dist/* \
+              --verify-tag \
+              --generate-notes \
+              --title "$RELEASE_TAG" \
+              --repo "$GITHUB_REPOSITORY"
+          fi

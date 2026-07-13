@@ -6,7 +6,7 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 readonly ROOT_DIR=${0:A:h:h}
 readonly CONFIGURATION=${CONFIGURATION:-release}
-readonly APP_NAME="Deskflow Active Session Manager.app"
+readonly APP_NAME="Deskflow ASM.app"
 readonly APP_PATH="$ROOT_DIR/.build/$APP_NAME"
 readonly CONTENTS="$APP_PATH/Contents"
 readonly MANAGER_NAME="Deskflow Active Session Manager"

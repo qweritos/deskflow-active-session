@@ -22,8 +22,8 @@ public enum ManagerConstants {
   public static let supervisorResourceName = "deskflow-session-supervisor"
   public static let helperExecutableName = "deskflow-manager-helper"
   public static let managerExecutableName = "Deskflow Active Session Manager"
-  public static let managerAppPath =
-    "/Applications/\(managerExecutableName).app"
+  public static let managerAppName = "Deskflow ASM.app"
+  public static let managerAppPath = "/Applications/\(managerAppName)"
 }
 
 public struct LocalAccount: Codable, Hashable, Identifiable, Sendable {

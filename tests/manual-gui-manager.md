@@ -17,7 +17,7 @@ Before testing:
    ./scripts/install-manager-app.sh
    ```
 
-2. Confirm the app is located at `/Applications/Deskflow Active Session Manager.app`.
+2. Confirm the app is located at `/Applications/Deskflow ASM.app`.
 3. Open the app and select **Set Up Helper**.
 4. If the helper requires approval, enable it under **System Settings → General → Login Items**, then return to the app.
 5. Confirm status refreshes without an administrator authorization dialog.

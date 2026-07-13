@@ -3,7 +3,7 @@ CONFIGURATION ?= release
 BINARY := .build/$(CONFIGURATION)/deskflow-session-supervisor
 USERS ?=
 
-.PHONY: all build check manager manager-install install uninstall status clean
+.PHONY: all build check manager dmg manager-install install uninstall status clean
 
 all: build
 
@@ -15,6 +15,9 @@ check:
 
 manager:
 	./scripts/build-manager-app.sh
+
+dmg: manager
+	./scripts/create-dmg.sh --arch $$(uname -m)
 
 manager-install:
 	./scripts/install-manager-app.sh

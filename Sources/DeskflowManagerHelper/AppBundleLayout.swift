@@ -23,8 +23,7 @@ struct AppBundleLayout {
     guard executable.pathExtension == "app",
       let bundle = Bundle(url: executable),
       bundle.bundleIdentifier == ManagerConstants.appBundleIdentifier,
-      executable.path
-        == "/Applications/\(ManagerConstants.managerExecutableName).app"
+      executable.path == ManagerConstants.managerAppPath
     else {
       throw ManagerBackendError.invalidPayload(
         "Manager helper is not in the expected signed application bundle."
