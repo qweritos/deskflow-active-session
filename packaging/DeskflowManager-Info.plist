@@ -10,6 +10,8 @@
   <string>Deskflow Active Session Manager</string>
   <key>CFBundleIdentifier</key>
   <string>io.github.qweritos.deskflow-active-session.manager</string>
+  <key>CFBundleIconFile</key>
+  <string>DeskflowASM</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>

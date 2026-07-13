@@ -103,6 +103,8 @@ install -m 644 "$ROOT_DIR/packaging/DeskflowManager-Info.plist" \
 install -m 644 "$ROOT_DIR/packaging/$HELPER_PLIST" \
   "$CONTENTS/Library/LaunchDaemons/$HELPER_PLIST"
 install -m 644 "$ROOT_DIR/LICENSE" "$CONTENTS/Resources/LICENSE"
+install -m 644 "$ROOT_DIR/packaging/DeskflowASM.icns" \
+  "$CONTENTS/Resources/DeskflowASM.icns"
 
 assemble_product deskflow-session-manager "$CONTENTS/MacOS/$MANAGER_NAME"
 assemble_product "$HELPER_NAME" "$CONTENTS/MacOS/$HELPER_NAME"

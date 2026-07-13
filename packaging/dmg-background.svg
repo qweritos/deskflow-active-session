@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="400" viewBox="0 0 660 400">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#111b2b"/>
+      <stop offset="0.52" stop-color="#0a111d"/>
+      <stop offset="1" stop-color="#07101a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#16a9f5"/>
+      <stop offset="0.5" stop-color="#42d3c0"/>
+      <stop offset="1" stop-color="#84ef35"/>
+    </linearGradient>
+    <radialGradient id="blueGlow">
+      <stop offset="0" stop-color="#169ff3" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#169ff3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="greenGlow">
+      <stop offset="0" stop-color="#83ec39" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#83ec39" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <rect width="660" height="400" fill="url(#background)"/>
+  <circle cx="105" cy="80" r="260" fill="url(#blueGlow)"/>
+  <circle cx="585" cy="325" r="260" fill="url(#greenGlow)"/>
+
+  <text x="330" y="48" fill="#f5f8ff" font-family="Helvetica"
+        font-size="25" font-weight="650" text-anchor="middle">Deskflow ASM</text>
+  <text x="330" y="74" fill="#aab6c8" font-family="Helvetica"
+        font-size="14" text-anchor="middle">Drag the app to Applications</text>
+
+  <rect x="70" y="104" width="200" height="228" rx="30" fill="#101b2a" fill-opacity="0.66"
+        stroke="#2aaef5" stroke-opacity="0.42"/>
+  <rect x="390" y="104" width="200" height="228" rx="30" fill="#101b2a" fill-opacity="0.66"
+        stroke="#7ee83d" stroke-opacity="0.40"/>
+
+  <path d="M286 200 H355 V176 L398 218 L355 260 V236 H286 Z"
+        fill="#000" fill-opacity="0.5" filter="url(#shadow)"/>
+  <path d="M282 196 H351 V172 L394 214 L351 256 V232 H282 Z" fill="url(#accent)"/>
+
+  <text x="170" y="363" fill="#8390a4" font-family="Helvetica"
+        font-size="12" text-anchor="middle">DESKFLOW ASM</text>
+  <text x="490" y="363" fill="#8390a4" font-family="Helvetica"
+        font-size="12" text-anchor="middle">APPLICATIONS</text>
+</svg>

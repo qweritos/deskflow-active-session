@@ -1,5 +1,5 @@
 <div align="center">
-  <h1><img alt="Deskflow" height="48" src="https://avatars.githubusercontent.com/u/181782356?s=200&v=4" /> deskflow-active-session</h1>
+  <h1><img alt="Deskflow ASM" height="48" src="docs/images/readme-icon.png" /> deskflow-active-session</h1>
   <p>Deskflow across macOS user sessions <br /> Share one Mac's keyboard and mouse regardless of which account is active</p>
 </div>
 

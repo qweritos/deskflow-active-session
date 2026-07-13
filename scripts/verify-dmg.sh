@@ -40,8 +40,16 @@ readonly manager="$app_path/Contents/MacOS/$MANAGER_NAME"
 [[ -d "$app_path" && ! -L "$app_path" ]]
 [[ -L "$mount_point/Applications" ]]
 [[ $(readlink "$mount_point/Applications") == "/Applications" ]]
+[[ -f "$mount_point/.background/dmg-background.png" ]]
+[[ -f "$mount_point/.DS_Store" ]]
+[[ -f "$mount_point/.VolumeIcon.icns" ]]
 [[ -x "$manager" ]]
 codesign --verify --deep --strict "$app_path"
+
+icon_name=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIconFile' \
+  "$app_path/Contents/Info.plist")
+[[ "$icon_name" == "DeskflowASM" ]]
+[[ -f "$app_path/Contents/Resources/DeskflowASM.icns" ]]
 
 architectures=(${(z)$(lipo -archs "$manager")})
 [[ ${#architectures} -eq 1 && "$architectures[1]" == "$expected_arch" ]] || {
