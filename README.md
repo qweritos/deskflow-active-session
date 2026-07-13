@@ -87,7 +87,7 @@ The installer requests administrator access, builds and ad-hoc signs one shared 
 
 Download the DMG for your Mac from [Releases](https://github.com/qweritos/deskflow-active-session/releases), open it, and drag **Deskflow ASM** onto the **Applications** shortcut. Intel (`x86_64`) and Apple-silicon (`arm64`) images are published separately with SHA-256 checksums.
 
-Release artifacts are signed with the configured Apple Development identity when the repository signing secrets are available. They are not notarized, so macOS displays a Gatekeeper warning when they are redistributed. CI falls back to an ad-hoc signature when no signing secrets are configured.
+Release artifacts are signed with the configured Apple Development identity when the repository signing secrets are available. The maintainer currently does not have a paid personal Apple Developer account available for Developer ID distribution signing and notarization. The releases are therefore not notarized, so macOS displays a Gatekeeper warning when they are redistributed. CI falls back to an ad-hoc signature when no signing secrets are configured.
 
 After dragging a trusted release to `/Applications`, remove its download quarantine and open it:
 
