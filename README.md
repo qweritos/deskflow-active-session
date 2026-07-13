@@ -89,6 +89,15 @@ Download the DMG for your Mac from [Releases](https://github.com/qweritos/deskfl
 
 Release artifacts are signed with the configured Apple Development identity when the repository signing secrets are available. They are not notarized, so macOS displays a Gatekeeper warning when they are redistributed. CI falls back to an ad-hoc signature when no signing secrets are configured.
 
+After dragging a trusted release to `/Applications`, remove its download quarantine and open it:
+
+```bash
+sudo /usr/bin/xattr -dr com.apple.quarantine "/Applications/Deskflow ASM.app"
+open "/Applications/Deskflow ASM.app"
+```
+
+Use `/usr/bin/xattr` explicitly: an older `/usr/local/bin/xattr` installed on some Macs does not support the recursive `-r` option.
+
 Confirm that a signing identity is available:
 
 ```bash
