@@ -12,8 +12,10 @@ deskflow-session-supervisor → deskflow-core server
 
 Release DMGs contain **Deskflow ASM.app** and an **Applications** shortcut for
 drag-and-drop installation. Intel (`x86_64`) and Apple-silicon (`arm64`) builds
-are published separately. The current CI artifacts are ad-hoc signed and not
-notarized, so use them for testing only.
+are published separately. CI uses the repository's Apple Development signing
+identity when configured and otherwise falls back to an ad-hoc signature. The
+DMGs are not notarized, so redistributed downloads can display a Gatekeeper
+warning.
 
 Source builds require full Xcode and a usable Apple Development or Developer ID signing identity:
 
@@ -56,13 +58,19 @@ make manager
 open ".build/Deskflow ASM.app"
 ```
 
+Or open `Deskflow ASM.xcodeproj`, select the shared **Deskflow ASM** scheme,
+and use **Run**. This calls the same bundle-building script and launches the
+debug app from `.build`. Use the source installer when testing helper
+registration or other privileged operations that require the canonical
+root-owned `/Applications/Deskflow ASM.app` location.
+
 Set `ARCHS` to build more than one architecture:
 
 ```bash
 ARCHS="x86_64 arm64" make manager
 ```
 
-Ad-hoc builds are for local testing only: they lack Gatekeeper trust and signature continuity, and the helper requires the app to be installed root-owned by the source installer. Publicly distributed builds need Developer ID signing and notarization. The source build scripts do not notarize or staple the app.
+Apple Development and ad-hoc builds lack public Gatekeeper trust, and the helper requires the app to be installed root-owned by the source installer. Developer ID signing and notarization are required to distribute without a Gatekeeper warning. The source build scripts do not notarize or staple the app.
 
 If verification reports `CSSMERR_TP_CERT_REVOKED`, renew the Apple Development
 certificate in **Xcode → Settings → Accounts → Manage Certificates**, then

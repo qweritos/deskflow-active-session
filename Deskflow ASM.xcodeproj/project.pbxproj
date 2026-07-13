@@ -1,0 +1,146 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXFileReference section */
+		D10000000000000000000001 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		D10000000000000000000002 /* Sources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sources; sourceTree = "<group>"; };
+		D10000000000000000000003 /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tests; sourceTree = "<group>"; };
+		D10000000000000000000004 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
+		D10000000000000000000005 /* Packaging */ = {isa = PBXFileReference; lastKnownFileType = folder; path = packaging; sourceTree = "<group>"; };
+		D10000000000000000000006 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D10000000000000000000007 /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		D10000000000000000000010 = {
+			isa = PBXGroup;
+			children = (
+				D10000000000000000000001 /* Package.swift */,
+				D10000000000000000000002 /* Sources */,
+				D10000000000000000000003 /* Tests */,
+				D10000000000000000000004 /* Scripts */,
+				D10000000000000000000005 /* Packaging */,
+				D10000000000000000000006 /* README.md */,
+				D10000000000000000000007 /* CONTRIBUTING.md */,
+				D10000000000000000000011 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D10000000000000000000011 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXLegacyTarget section */
+		D10000000000000000000020 /* Deskflow ASM */ = {
+			isa = PBXLegacyTarget;
+			buildArgumentsString = manager;
+			buildConfigurationList = D10000000000000000000031 /* Build configuration list for PBXLegacyTarget "Deskflow ASM" */;
+			buildPhases = (
+			);
+			buildToolPath = /usr/bin/make;
+			buildWorkingDirectory = "$(PROJECT_DIR)";
+			dependencies = (
+			);
+			name = "Deskflow ASM";
+			passBuildSettingsInEnvironment = 1;
+			productName = "Deskflow ASM";
+		};
+/* End PBXLegacyTarget section */
+
+/* Begin PBXProject section */
+		D10000000000000000000021 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2630;
+				LastUpgradeCheck = 2630;
+				TargetAttributes = {
+					D10000000000000000000020 = {
+						CreatedOnToolsVersion = 26.3;
+					};
+				};
+			};
+			buildConfigurationList = D10000000000000000000030 /* Build configuration list for PBXProject "Deskflow ASM" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D10000000000000000000010;
+			productRefGroup = D10000000000000000000011 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D10000000000000000000020 /* Deskflow ASM */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		D10000000000000000000040 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION = debug;
+			};
+			name = Debug;
+		};
+		D10000000000000000000041 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CONFIGURATION = release;
+			};
+			name = Release;
+		};
+		D10000000000000000000042 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION = debug;
+			};
+			name = Debug;
+		};
+		D10000000000000000000043 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
+				CONFIGURATION = release;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D10000000000000000000030 /* Build configuration list for PBXProject "Deskflow ASM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D10000000000000000000040 /* Debug */,
+				D10000000000000000000041 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D10000000000000000000031 /* Build configuration list for PBXLegacyTarget "Deskflow ASM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D10000000000000000000042 /* Debug */,
+				D10000000000000000000043 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D10000000000000000000021 /* Project object */;
+}

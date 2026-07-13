@@ -52,10 +52,50 @@ jobs:
       - name: Test
         run: make check
 
+      - name: Configure code signing
+        shell: bash
+        env:
+          MACOS_CERTIFICATE_P12: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_CODESIGN_IDENTITY: ${{ secrets.MACOS_CODESIGN_IDENTITY }}
+        run: |
+          if [[ -z "$MACOS_CERTIFICATE_P12" \
+            && -z "$MACOS_CERTIFICATE_PASSWORD" \
+            && -z "$MACOS_CODESIGN_IDENTITY" ]]; then
+            echo "CODESIGN_IDENTITY=-" >> "$GITHUB_ENV"
+            echo "No signing secrets configured; using an ad-hoc signature."
+            exit 0
+          fi
+
+          test -n "$MACOS_CERTIFICATE_P12"
+          test -n "$MACOS_CERTIFICATE_PASSWORD"
+          test -n "$MACOS_CODESIGN_IDENTITY"
+
+          keychain="$RUNNER_TEMP/deskflow-signing.keychain-db"
+          certificate="$RUNNER_TEMP/deskflow-signing.p12"
+          keychain_password=$(openssl rand -hex 32)
+
+          printf '%s' "$MACOS_CERTIFICATE_P12" | base64 -D > "$certificate"
+          security create-keychain -p "$keychain_password" "$keychain"
+          security set-keychain-settings -lut 21600 "$keychain"
+          security unlock-keychain -p "$keychain_password" "$keychain"
+          security import "$certificate" -k "$keychain" \
+            -P "$MACOS_CERTIFICATE_PASSWORD" \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: \
+            -s -k "$keychain_password" "$keychain" >/dev/null
+          security list-keychains -d user -s "$keychain"
+          security find-identity -v -p codesigning "$keychain" \
+            | grep -F "$MACOS_CODESIGN_IDENTITY" >/dev/null
+
+          rm -f "$certificate"
+          echo "CODESIGN_IDENTITY=$MACOS_CODESIGN_IDENTITY" >> "$GITHUB_ENV"
+          echo "SIGNING_KEYCHAIN=$keychain" >> "$GITHUB_ENV"
+
       - name: Build architecture-specific app
         env:
           ARCHS: ${{ matrix.arch }}
-          CODESIGN_IDENTITY: "-"
         run: ./scripts/build-manager-app.sh
 
       - name: Create drag-and-drop DMG
@@ -74,6 +114,10 @@ jobs:
           path: dist/*
           if-no-files-found: error
           retention-days: 14
+
+      - name: Remove temporary signing keychain
+        if: always() && env.SIGNING_KEYCHAIN != ''
+        run: security delete-keychain "$SIGNING_KEYCHAIN"
 
   release:
     name: Publish GitHub release

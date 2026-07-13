@@ -87,7 +87,7 @@ The installer requests administrator access, builds and ad-hoc signs one shared 
 
 Download the DMG for your Mac from [Releases](https://github.com/qweritos/deskflow-active-session/releases), open it, and drag **Deskflow ASM** onto the **Applications** shortcut. Intel (`x86_64`) and Apple-silicon (`arm64`) images are published separately with SHA-256 checksums.
 
-The current CI artifacts are ad-hoc signed and not notarized, so they are intended for testing. A public production build requires Developer ID signing and notarization. For a functional secure local installation, build from source with full Xcode and a usable Apple Development identity.
+Release artifacts are signed with the configured Apple Development identity when the repository signing secrets are available. They are not notarized, so macOS displays a Gatekeeper warning when they are redistributed. CI falls back to an ad-hoc signature when no signing secrets are configured.
 
 Confirm that a signing identity is available:
 
@@ -100,6 +100,8 @@ Build, sign, install, and open the native manager:
 ```bash
 ./scripts/install-manager-app.sh
 ```
+
+For manual development, open `Deskflow ASM.xcodeproj`, select the shared **Deskflow ASM** scheme, and use **Run**. The scheme invokes the same bundle-building script used by the command line and launches `.build/Deskflow ASM.app`.
 
 The script stages and verifies a root-owned app in a protected system directory, then atomically exchanges it into `/Applications`. It does not notarize or staple the build. On first launch, select **Set Up Helper**. If macOS requests approval, enable the manager in **System Settings → General → Login Items**, return to the app, select the participating accounts, and choose **Install / Upgrade**.
 
@@ -255,7 +257,7 @@ The optional GUI registers an on-demand, management-only LaunchDaemon through ma
 - The login window, SSH sessions, and non-console sessions are not served.
 - A forced shutdown can leave the port unavailable briefly; the supervisor retries automatically.
 - Full Fast User Switching behavior requires manual testing on a two-user Mac.
-- Ad-hoc local signatures do not provide permission continuity across changed builds. Distributed releases should use a stable Developer ID signature and notarization.
+- Apple Development and ad-hoc signatures are not trusted for public distribution, so Gatekeeper can warn when a release is opened. Developer ID signing and notarization are required to avoid that warning.
 - The GUI helper requires the canonical, securely owned app in `/Applications`. Public GUI builds also need Developer ID signing and notarization.
 
 ## Tested environment

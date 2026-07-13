@@ -25,6 +25,28 @@ Build the native manager bundle without installing it:
 make manager
 ```
 
+For interactive development, open the checked-in Xcode project:
+
+```sh
+open "Deskflow ASM.xcodeproj"
+```
+
+Select the shared **Deskflow ASM** scheme and press `Command-R`. The project uses the repository build script, chooses a non-revoked local Apple Development identity, builds the native architecture in debug mode, and launches `.build/Deskflow ASM.app`. Source files remain owned by the Swift package, so command-line and Xcode builds use the same targets.
+
+The development app can be used for UI work. Management-helper registration still requires the canonical root-owned installation in `/Applications`; use `make manager-install` before testing privileged lifecycle operations.
+
+## Release signing
+
+The release workflow reads these encrypted GitHub Actions secrets:
+
+- `MACOS_CERTIFICATE_P12`: base64-encoded PKCS#12 identity and private key
+- `MACOS_CERTIFICATE_PASSWORD`: PKCS#12 password
+- `MACOS_CODESIGN_IDENTITY`: exact certificate SHA-1 fingerprint
+
+The workflow imports the identity into a temporary keychain on each macOS runner and deletes that keychain after the artifact is built. When all three secrets are absent, it creates an ad-hoc signed build. A partial configuration fails the build instead of silently changing signatures.
+
+The configured Apple Development identity provides consistent signatures for the bundled manager, helper, and supervisor, but it does not provide public Gatekeeper trust. The release remains unnotarized and can display a warning after download.
+
 The smoke suite must not modify the installed LaunchAgents or a user's Deskflow configuration.
 
 ## Change guidelines
