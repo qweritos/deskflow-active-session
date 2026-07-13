@@ -22,7 +22,15 @@ DESKFLOW_CORE=/usr/bin/true \
 DESKFLOW_CORE=/usr/bin/true \
   "$ROOT_DIR/scripts/install.sh" --dry-run --prebuilt "$BINARY" \
   "$(id -un)" >/dev/null
-(cd "$ROOT_DIR" && swift test >/dev/null)
+xcodebuild \
+  -project "$ROOT_DIR/Deskflow ASM.xcodeproj" \
+  -scheme "Deskflow ASM" \
+  -configuration Debug \
+  -derivedDataPath "$ROOT_DIR/.build/smoke-xcode-derived" \
+  CODE_SIGN_STYLE=Manual \
+  CODE_SIGN_IDENTITY=- \
+  DEVELOPMENT_TEAM= \
+  test >/dev/null
 plutil -lint "$ROOT_DIR"/packaging/*.plist >/dev/null
 
 CODESIGN_IDENTITY=- ARCHS=$(uname -m) \

@@ -15,14 +15,14 @@ Build and check the project:
 
 ```sh
 swift build -c release
-swift test
+xcodebuild -project "Deskflow ASM.xcodeproj" -scheme "Deskflow ASM" test
 ./tests/smoke.sh
 ```
 
 Build the native manager bundle without installing it:
 
 ```sh
-make manager
+./scripts/build-manager-app.sh
 ```
 
 For interactive development, open the checked-in Xcode project:
@@ -31,9 +31,9 @@ For interactive development, open the checked-in Xcode project:
 open "Deskflow ASM.xcodeproj"
 ```
 
-Select the shared **Deskflow ASM** scheme and press `Command-R`. The project uses the repository build script, chooses a non-revoked local Apple Development identity, builds the native architecture in debug mode, and launches `.build/Deskflow ASM.app`. Source files remain owned by the Swift package, so command-line and Xcode builds use the same targets.
+Select the shared **Deskflow ASM** scheme and press `Command-R`. Xcode natively builds the app, core library, management helper, session supervisor, installer tool, and tests. It embeds and signs the helper executables through target dependencies and Copy Files phases.
 
-The development app can be used for UI work. Management-helper registration still requires the canonical root-owned installation in `/Applications`; use `make manager-install` before testing privileged lifecycle operations.
+The development app can be used for UI work. Management-helper registration still requires the canonical root-owned installation in `/Applications`; use `./scripts/install-manager-app.sh` before testing privileged lifecycle operations.
 
 ## Release signing
 

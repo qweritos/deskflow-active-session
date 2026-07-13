@@ -4,8 +4,7 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES"
-      buildArchitectures = "Automatic">
+      buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -15,8 +14,8 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D10000000000000000000020"
-               BuildableName = "Deskflow ASM"
+               BlueprintIdentifier = "97AE0D9E9B3CC65443380C4C"
+               BuildableName = "Deskflow ASM.app"
                BlueprintName = "Deskflow ASM"
                ReferencedContainer = "container:Deskflow ASM.xcodeproj">
             </BuildableReference>
@@ -27,8 +26,28 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "97AE0D9E9B3CC65443380C4C"
+            BuildableName = "Deskflow ASM.app"
+            BlueprintName = "Deskflow ASM"
+            ReferencedContainer = "container:Deskflow ASM.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E19D73F1A40A73D91625AD4F"
+               BuildableName = "DeskflowManagerCoreTests.xctest"
+               BlueprintName = "DeskflowManagerCoreTests"
+               ReferencedContainer = "container:Deskflow ASM.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -40,10 +59,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <PathRunnable
-         runnableDebuggingMode = "0"
-         FilePath = "$(PROJECT_DIR)/.build/Deskflow ASM.app">
-      </PathRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "97AE0D9E9B3CC65443380C4C"
+            BuildableName = "Deskflow ASM.app"
+            BlueprintName = "Deskflow ASM"
+            ReferencedContainer = "container:Deskflow ASM.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -51,10 +76,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <PathRunnable
-         runnableDebuggingMode = "0"
-         FilePath = "$(PROJECT_DIR)/.build/Deskflow ASM.app">
-      </PathRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "97AE0D9E9B3CC65443380C4C"
+            BuildableName = "Deskflow ASM.app"
+            BlueprintName = "Deskflow ASM"
+            ReferencedContainer = "container:Deskflow ASM.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

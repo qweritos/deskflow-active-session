@@ -50,7 +50,7 @@ jobs:
           echo "VERSION=$version" >> "$GITHUB_ENV"
 
       - name: Test
-        run: make check
+        run: ./tests/smoke.sh
 
       - name: Configure code signing
         shell: bash

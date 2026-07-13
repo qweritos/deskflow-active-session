@@ -54,20 +54,20 @@ CODESIGN_IDENTITY="Apple Development: Your Name (TEAMID)" \
 Build without copying the app:
 
 ```bash
-make manager
+./scripts/build-manager-app.sh
 open ".build/Deskflow ASM.app"
 ```
 
 Or open `Deskflow ASM.xcodeproj`, select the shared **Deskflow ASM** scheme,
-and use **Run**. This calls the same bundle-building script and launches the
-debug app from `.build`. Use the source installer when testing helper
+and use **Run**. Xcode natively builds, embeds, signs, and launches the app and
+its helper executables. Use the source installer when testing helper
 registration or other privileged operations that require the canonical
 root-owned `/Applications/Deskflow ASM.app` location.
 
 Set `ARCHS` to build more than one architecture:
 
 ```bash
-ARCHS="x86_64 arm64" make manager
+ARCHS="x86_64 arm64" ./scripts/build-manager-app.sh
 ```
 
 Apple Development and ad-hoc builds lack public Gatekeeper trust, and the helper requires the app to be installed root-owned by the source installer. Developer ID signing and notarization are required to distribute without a Gatekeeper warning. The source build scripts do not notarize or staple the app.

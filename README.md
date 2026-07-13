@@ -129,9 +129,9 @@ Each participating user gets an Aqua LaunchAgent running `deskflow-session-super
 ## Development
 
 ```bash
-make check
-make manager
 open "Deskflow ASM.xcodeproj"
+xcodebuild -project "Deskflow ASM.xcodeproj" -scheme "Deskflow ASM" test
+./scripts/build-manager-app.sh
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md), the [manual switching test](tests/manual-fast-user-switching.md), and the [manual GUI test](tests/manual-gui-manager.md).

@@ -2,3 +2,5 @@
 /.swiftpm/
 *.log
 .DS_Store
+xcuserdata/
+*.xcuserstate

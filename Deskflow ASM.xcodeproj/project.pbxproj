@@ -6,71 +6,531 @@
 	objectVersion = 56;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		01822526368A88491DD3756F /* ManagerModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCFB6EA0310DF8C61E857694 /* ManagerModelsTests.swift */; };
+		042EFB64F48B6F0B9B43C08A /* libDeskflowManagerCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB79985DAB0909F43A0C0A2 /* libDeskflowManagerCore.a */; };
+		05D4FB6BACDFA72E2FDB8C0F /* libDeskflowManagerCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB79985DAB0909F43A0C0A2 /* libDeskflowManagerCore.a */; };
+		068CBF11E0B173FCE6CB8CEB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF865B5BB556C5992FA34C3 /* Cocoa.framework */; };
+		075338A7A1A74121799B91A8 /* CodeSignatureValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB0AA42D49B508B4EB2C277 /* CodeSignatureValidator.swift */; };
+		0CBA22441429F738EF7C7A39 /* deskflow-manager-installer-tool in Embed Supervisor and Installer */ = {isa = PBXBuildFile; fileRef = 0EF4DA7894CB8AE750A2AF05 /* deskflow-manager-installer-tool */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		0F338150F6D23CB005B7122B /* FixedProcessRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783CD60D39AFAD499B834549 /* FixedProcessRunner.swift */; };
+		1DA8CFE5AA58CEF19DF8AAAE /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF865B5BB556C5992FA34C3 /* Cocoa.framework */; };
+		2D2029A121E524EBD331ABC6 /* SecureFileSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7081F981C40075F68CA4D8FA /* SecureFileSystem.swift */; };
+		2F0913D77A76917F71A12EFA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF865B5BB556C5992FA34C3 /* Cocoa.framework */; };
+		3A0C435B65B93EBF3C76134E /* SystemSnapshotProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 853CB497A4FE3A6DB0BFF111 /* SystemSnapshotProvider.swift */; };
+		4295FBBE994F3BB369D372F0 /* deskflow-manager-helper in Embed Management Helper */ = {isa = PBXBuildFile; fileRef = EB96AC0936AF3729DADEC3FD /* deskflow-manager-helper */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		453A5D0699B22DA611E1A632 /* ManagerEventLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DBC211EEC9539C5AA7D43ED /* ManagerEventLog.swift */; };
+		48F9B862BE4040D60216DB3C /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 25C287CB9AD4A2879E0E11FF /* LICENSE */; };
+		4DEA696C8FA2F84CE2D3D33C /* ManagerErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7434BB80B99708C8C21FE286 /* ManagerErrors.swift */; };
+		5A247D6BBC8699A49A56110D /* AuthorizationValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95FAFD514973572CD24B31FE /* AuthorizationValidator.swift */; };
+		7003FFEEBDAB2A7AB33AE131 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF865B5BB556C5992FA34C3 /* Cocoa.framework */; };
+		77A478B54BAC8B5B4584690A /* HelperClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1774CC4B97DDB8EFD9E9A11 /* HelperClient.swift */; };
+		78C96654FB8D6DB54263F88B /* ManagerXPCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC14AEE6159609E67C8231E5 /* ManagerXPCService.swift */; };
+		7C5D32854123103FF138C046 /* AgentPlistStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F393E5C535DCD25297FE800 /* AgentPlistStore.swift */; };
+		837806498B8C1DBD58F3CEDC /* ManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C548805730C82CBBFE0898B /* ManagerModel.swift */; };
+		84346E570E70D8C217DB7BB4 /* DeskflowASM.icns in Resources */ = {isa = PBXBuildFile; fileRef = DCD8C630BFEE545ACAC18953 /* DeskflowASM.icns */; };
+		8E575AD613FBAB6CC449DC2E /* BackendSafetyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FFC7CF04D4CDC9B18840F0F /* BackendSafetyTests.swift */; };
+		9208E5B6CB1FF0D72612F986 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920A507B1FCCBEC0C75C0F2A /* main.swift */; };
+		946772F277469A22C440C72B /* libDeskflowManagerCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB79985DAB0909F43A0C0A2 /* libDeskflowManagerCore.a */; };
+		9AA9EF1B3232AF0FD8F1EA52 /* io.github.qweritos.deskflow-active-session.manager-helper.plist in Embed LaunchDaemon Property List */ = {isa = PBXBuildFile; fileRef = 045B88EF4BF07615E0DC1884 /* io.github.qweritos.deskflow-active-session.manager-helper.plist */; };
+		9DAAF1D328A7299CA42A38DF /* DeskflowManagerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBFB9EB8EF3160A5D0733B61 /* DeskflowManagerBackend.swift */; };
+		AF137257DBD9C1C6BC15F76E /* deskflow-session-supervisor in Embed Supervisor and Installer */ = {isa = PBXBuildFile; fileRef = 630B49616BC5E020A5735912 /* deskflow-session-supervisor */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B4E011CF31E707EEB9E02CA7 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EDA867411B220E093CD65F /* main.swift */; };
+		D660E147CB884D808DFC66DA /* AppBundleLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD702363416154A69E7370A3 /* AppBundleLayout.swift */; };
+		D910436CCAFB3E50A7D73388 /* LocalAccountDiscovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9214C664AB43AF883047E98 /* LocalAccountDiscovery.swift */; };
+		E138B114E80EA1EC47913898 /* ManagerModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A0416CC7BBB2080ECF84EE /* ManagerModels.swift */; };
+		E43EFC525B73FA219AD2DB16 /* ManagerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB806D4EA70038BEC6DDBC52 /* ManagerApp.swift */; };
+		E60F4712BA94396BE3B3421D /* LaunchdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 065AC534F7C845F838335373 /* LaunchdController.swift */; };
+		EA288F80B0BAD5AF4510ACDF /* ManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE4C1C995CD14A2B46B352 /* ManagerView.swift */; };
+		EBCB961FE7CFF5E68A212E9F /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605A48D4D9C668613F8A2CBE /* main.swift */; };
+		ED6E5C457EB9CA0E021D3BF5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECF865B5BB556C5992FA34C3 /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		19718CE3AFC3AFD2BFC04339 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3432FBA9A08C604AF2183F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74B2823F74E91AFFDC6156F9;
+			remoteInfo = DeskflowManagerCore;
+		};
+		1CA62B7FA0B2EF8B709BF6D0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3432FBA9A08C604AF2183F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74B2823F74E91AFFDC6156F9;
+			remoteInfo = DeskflowManagerCore;
+		};
+		41E94CFD1495888AD2D779C7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3432FBA9A08C604AF2183F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C87E8F6C454EF9DA81F440F7;
+			remoteInfo = "deskflow-manager-helper";
+		};
+		56852E3A0B4AC3FF15C97194 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3432FBA9A08C604AF2183F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4BAFECE3EA97958BF38EF63D;
+			remoteInfo = "deskflow-session-supervisor";
+		};
+		7F5A7930F44AD2A8E34296E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3432FBA9A08C604AF2183F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 74B2823F74E91AFFDC6156F9;
+			remoteInfo = DeskflowManagerCore;
+		};
+		EFE9C2591DE2705A70080A5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3432FBA9A08C604AF2183F90 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ED8DA08CF4F1B10FC78FAD7E;
+			remoteInfo = "deskflow-manager-installer-tool";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A92B41DE22A120E9D00C0399 /* Embed Supervisor and Installer */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				AF137257DBD9C1C6BC15F76E /* deskflow-session-supervisor in Embed Supervisor and Installer */,
+				0CBA22441429F738EF7C7A39 /* deskflow-manager-installer-tool in Embed Supervisor and Installer */,
+			);
+			name = "Embed Supervisor and Installer";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1491440ED3D8AD13671E939 /* Embed LaunchDaemon Property List */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchDaemons;
+			dstSubfolderSpec = 1;
+			files = (
+				9AA9EF1B3232AF0FD8F1EA52 /* io.github.qweritos.deskflow-active-session.manager-helper.plist in Embed LaunchDaemon Property List */,
+			);
+			name = "Embed LaunchDaemon Property List";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2F2B3ABD9CFB660358C9C67 /* Embed Management Helper */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				4295FBBE994F3BB369D372F0 /* deskflow-manager-helper in Embed Management Helper */,
+			);
+			name = "Embed Management Helper";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		D10000000000000000000001 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		D10000000000000000000002 /* Sources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Sources; sourceTree = "<group>"; };
-		D10000000000000000000003 /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tests; sourceTree = "<group>"; };
-		D10000000000000000000004 /* Scripts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = scripts; sourceTree = "<group>"; };
-		D10000000000000000000005 /* Packaging */ = {isa = PBXFileReference; lastKnownFileType = folder; path = packaging; sourceTree = "<group>"; };
-		D10000000000000000000006 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		D10000000000000000000007 /* CONTRIBUTING.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		045B88EF4BF07615E0DC1884 /* io.github.qweritos.deskflow-active-session.manager-helper.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "io.github.qweritos.deskflow-active-session.manager-helper.plist"; sourceTree = "<group>"; };
+		065AC534F7C845F838335373 /* LaunchdController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LaunchdController.swift; sourceTree = "<group>"; };
+		0EF4DA7894CB8AE750A2AF05 /* deskflow-manager-installer-tool */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = "deskflow-manager-installer-tool"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FFC7CF04D4CDC9B18840F0F /* BackendSafetyTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BackendSafetyTests.swift; sourceTree = "<group>"; };
+		1C548805730C82CBBFE0898B /* ManagerModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerModel.swift; sourceTree = "<group>"; };
+		1DBC211EEC9539C5AA7D43ED /* ManagerEventLog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerEventLog.swift; sourceTree = "<group>"; };
+		25C287CB9AD4A2879E0E11FF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		2DB79985DAB0909F43A0C0A2 /* libDeskflowManagerCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDeskflowManagerCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F393E5C535DCD25297FE800 /* AgentPlistStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AgentPlistStore.swift; sourceTree = "<group>"; };
+		4AE20C6AD4E775283B04ADC4 /* Makefile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		605A48D4D9C668613F8A2CBE /* main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		630B49616BC5E020A5735912 /* deskflow-session-supervisor */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = "deskflow-session-supervisor"; sourceTree = BUILT_PRODUCTS_DIR; };
+		654DEDD377A060F286941177 /* Deskflow ASM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Deskflow ASM.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7081F981C40075F68CA4D8FA /* SecureFileSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SecureFileSystem.swift; sourceTree = "<group>"; };
+		7434BB80B99708C8C21FE286 /* ManagerErrors.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerErrors.swift; sourceTree = "<group>"; };
+		783CD60D39AFAD499B834549 /* FixedProcessRunner.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FixedProcessRunner.swift; sourceTree = "<group>"; };
+		7F29F3D810AFC5E4A2D4511B /* Package.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		853CB497A4FE3A6DB0BFF111 /* SystemSnapshotProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SystemSnapshotProvider.swift; sourceTree = "<group>"; };
+		86A0416CC7BBB2080ECF84EE /* ManagerModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerModels.swift; sourceTree = "<group>"; };
+		892D1719E6849E31AB764FF4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		920A507B1FCCBEC0C75C0F2A /* main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		95FAFD514973572CD24B31FE /* AuthorizationValidator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuthorizationValidator.swift; sourceTree = "<group>"; };
+		9FCE4C1C995CD14A2B46B352 /* ManagerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerView.swift; sourceTree = "<group>"; };
+		AB806D4EA70038BEC6DDBC52 /* ManagerApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerApp.swift; sourceTree = "<group>"; };
+		AD702363416154A69E7370A3 /* AppBundleLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppBundleLayout.swift; sourceTree = "<group>"; };
+		BCDD307D4DB8EAAD65FCD4CA /* DeskflowASM-AppIcon.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "DeskflowASM-AppIcon.png"; sourceTree = "<group>"; };
+		BCFB6EA0310DF8C61E857694 /* ManagerModelsTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerModelsTests.swift; sourceTree = "<group>"; };
+		BFE89637D18925B575EC943F /* DeskflowManagerCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DeskflowManagerCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C15FC89A0CFD9BE4241C31E5 /* CONTRIBUTING.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = CONTRIBUTING.md; sourceTree = "<group>"; };
+		C1774CC4B97DDB8EFD9E9A11 /* HelperClient.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HelperClient.swift; sourceTree = "<group>"; };
+		C9214C664AB43AF883047E98 /* LocalAccountDiscovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LocalAccountDiscovery.swift; sourceTree = "<group>"; };
+		CC14AEE6159609E67C8231E5 /* ManagerXPCService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ManagerXPCService.swift; sourceTree = "<group>"; };
+		DBFB9EB8EF3160A5D0733B61 /* DeskflowManagerBackend.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeskflowManagerBackend.swift; sourceTree = "<group>"; };
+		DCD8C630BFEE545ACAC18953 /* DeskflowASM.icns */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.icns; path = DeskflowASM.icns; sourceTree = "<group>"; };
+		E79B4459803409131A5ABFB3 /* DeskflowManager-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "DeskflowManager-Info.plist"; sourceTree = "<group>"; };
+		E7EDA867411B220E093CD65F /* main.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		E7F5750217724123D3F51D63 /* dmg-background.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "dmg-background.png"; sourceTree = "<group>"; };
+		E9EBB6468F033BA47FD9BC02 /* dmg-background.svg */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "dmg-background.svg"; sourceTree = "<group>"; };
+		EB96AC0936AF3729DADEC3FD /* deskflow-manager-helper */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = "deskflow-manager-helper"; sourceTree = BUILT_PRODUCTS_DIR; };
+		ECF865B5BB556C5992FA34C3 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		EDB0AA42D49B508B4EB2C277 /* CodeSignatureValidator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CodeSignatureValidator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFrameworksBuildPhase section */
+		1D2253FC2CD82473B5627A44 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1DA8CFE5AA58CEF19DF8AAAE /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5ED66CD271FF540C29C4F197 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED6E5C457EB9CA0E021D3BF5 /* Cocoa.framework in Frameworks */,
+				946772F277469A22C440C72B /* libDeskflowManagerCore.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		87045428DD6DC09147A4CCA4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				068CBF11E0B173FCE6CB8CEB /* Cocoa.framework in Frameworks */,
+				05D4FB6BACDFA72E2FDB8C0F /* libDeskflowManagerCore.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		945DE5BB12B45BA39E3AE5B5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7003FFEEBDAB2A7AB33AE131 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBC642CAA793F8E7D2642FC1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F0913D77A76917F71A12EFA /* Cocoa.framework in Frameworks */,
+				042EFB64F48B6F0B9B43C08A /* libDeskflowManagerCore.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F524F15D0F6BECEBDE9C01E7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
-		D10000000000000000000010 = {
+		0094F718575D924E00BF83E5 /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				D10000000000000000000001 /* Package.swift */,
-				D10000000000000000000002 /* Sources */,
-				D10000000000000000000003 /* Tests */,
-				D10000000000000000000004 /* Scripts */,
-				D10000000000000000000005 /* Packaging */,
-				D10000000000000000000006 /* README.md */,
-				D10000000000000000000007 /* CONTRIBUTING.md */,
-				D10000000000000000000011 /* Products */,
+				ECF865B5BB556C5992FA34C3 /* Cocoa.framework */,
 			);
+			name = "OS X";
 			sourceTree = "<group>";
 		};
-		D10000000000000000000011 /* Products */ = {
+		2B5191359624066A181B33EF /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				2DB79985DAB0909F43A0C0A2 /* libDeskflowManagerCore.a */,
+				654DEDD377A060F286941177 /* Deskflow ASM.app */,
+				EB96AC0936AF3729DADEC3FD /* deskflow-manager-helper */,
+				630B49616BC5E020A5735912 /* deskflow-session-supervisor */,
+				0EF4DA7894CB8AE750A2AF05 /* deskflow-manager-installer-tool */,
+				BFE89637D18925B575EC943F /* DeskflowManagerCoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
+		31CA29A86D2C9676742AE570 /* Packaging */ = {
+			isa = PBXGroup;
+			children = (
+				E79B4459803409131A5ABFB3 /* DeskflowManager-Info.plist */,
+				045B88EF4BF07615E0DC1884 /* io.github.qweritos.deskflow-active-session.manager-helper.plist */,
+				DCD8C630BFEE545ACAC18953 /* DeskflowASM.icns */,
+				BCDD307D4DB8EAAD65FCD4CA /* DeskflowASM-AppIcon.png */,
+				E9EBB6468F033BA47FD9BC02 /* dmg-background.svg */,
+				E7F5750217724123D3F51D63 /* dmg-background.png */,
+			);
+			name = Packaging;
+			path = packaging;
+			sourceTree = "<group>";
+		};
+		4F5450F7AC8C8334D0C86EEA /* DeskflowManagerCore */ = {
+			isa = PBXGroup;
+			children = (
+				2F393E5C535DCD25297FE800 /* AgentPlistStore.swift */,
+				EDB0AA42D49B508B4EB2C277 /* CodeSignatureValidator.swift */,
+				DBFB9EB8EF3160A5D0733B61 /* DeskflowManagerBackend.swift */,
+				783CD60D39AFAD499B834549 /* FixedProcessRunner.swift */,
+				065AC534F7C845F838335373 /* LaunchdController.swift */,
+				C9214C664AB43AF883047E98 /* LocalAccountDiscovery.swift */,
+				7434BB80B99708C8C21FE286 /* ManagerErrors.swift */,
+				86A0416CC7BBB2080ECF84EE /* ManagerModels.swift */,
+				7081F981C40075F68CA4D8FA /* SecureFileSystem.swift */,
+				853CB497A4FE3A6DB0BFF111 /* SystemSnapshotProvider.swift */,
+			);
+			name = DeskflowManagerCore;
+			path = Sources/DeskflowManagerCore;
+			sourceTree = "<group>";
+		};
+		556CA74FD6E3A3B7BE9BEF63 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Scripts;
+			path = scripts;
+			sourceTree = "<group>";
+		};
+		758BE11809F570E5545C8DB6 /* DeskflowSessionSupervisor */ = {
+			isa = PBXGroup;
+			children = (
+				605A48D4D9C668613F8A2CBE /* main.swift */,
+			);
+			name = DeskflowSessionSupervisor;
+			path = Sources/DeskflowSessionSupervisor;
+			sourceTree = "<group>";
+		};
+		89C2AED06A6D0C8E9CE78E23 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0094F718575D924E00BF83E5 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A01A3FD53E6C5E764B11BCAA /* DeskflowManagerInstallerTool */ = {
+			isa = PBXGroup;
+			children = (
+				920A507B1FCCBEC0C75C0F2A /* main.swift */,
+			);
+			name = DeskflowManagerInstallerTool;
+			path = Sources/DeskflowManagerInstallerTool;
+			sourceTree = "<group>";
+		};
+		B2126B089B23CE8ED6F86FFF /* DeskflowManagerCoreTests */ = {
+			isa = PBXGroup;
+			children = (
+				0FFC7CF04D4CDC9B18840F0F /* BackendSafetyTests.swift */,
+				BCFB6EA0310DF8C61E857694 /* ManagerModelsTests.swift */,
+			);
+			name = DeskflowManagerCoreTests;
+			path = tests/DeskflowManagerCoreTests;
+			sourceTree = "<group>";
+		};
+		BA4F23FF75735176F69467E7 = {
+			isa = PBXGroup;
+			children = (
+				2B5191359624066A181B33EF /* Products */,
+				89C2AED06A6D0C8E9CE78E23 /* Frameworks */,
+				4F5450F7AC8C8334D0C86EEA /* DeskflowManagerCore */,
+				E970D8FCC512F0752D3B00D6 /* DeskflowSessionManager */,
+				F7F3446834BB9D25195D6A7E /* DeskflowManagerHelper */,
+				758BE11809F570E5545C8DB6 /* DeskflowSessionSupervisor */,
+				A01A3FD53E6C5E764B11BCAA /* DeskflowManagerInstallerTool */,
+				B2126B089B23CE8ED6F86FFF /* DeskflowManagerCoreTests */,
+				31CA29A86D2C9676742AE570 /* Packaging */,
+				25C287CB9AD4A2879E0E11FF /* LICENSE */,
+				7F29F3D810AFC5E4A2D4511B /* Package.swift */,
+				4AE20C6AD4E775283B04ADC4 /* Makefile */,
+				892D1719E6849E31AB764FF4 /* README.md */,
+				C15FC89A0CFD9BE4241C31E5 /* CONTRIBUTING.md */,
+				556CA74FD6E3A3B7BE9BEF63 /* Scripts */,
+				C6E8427D32DD28B259F68176 /* Documentation */,
+			);
+			sourceTree = "<group>";
+		};
+		C6E8427D32DD28B259F68176 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			path = docs;
+			sourceTree = "<group>";
+		};
+		E970D8FCC512F0752D3B00D6 /* DeskflowSessionManager */ = {
+			isa = PBXGroup;
+			children = (
+				C1774CC4B97DDB8EFD9E9A11 /* HelperClient.swift */,
+				AB806D4EA70038BEC6DDBC52 /* ManagerApp.swift */,
+				1DBC211EEC9539C5AA7D43ED /* ManagerEventLog.swift */,
+				1C548805730C82CBBFE0898B /* ManagerModel.swift */,
+				9FCE4C1C995CD14A2B46B352 /* ManagerView.swift */,
+			);
+			name = DeskflowSessionManager;
+			path = Sources/DeskflowSessionManager;
+			sourceTree = "<group>";
+		};
+		F7F3446834BB9D25195D6A7E /* DeskflowManagerHelper */ = {
+			isa = PBXGroup;
+			children = (
+				AD702363416154A69E7370A3 /* AppBundleLayout.swift */,
+				95FAFD514973572CD24B31FE /* AuthorizationValidator.swift */,
+				CC14AEE6159609E67C8231E5 /* ManagerXPCService.swift */,
+				E7EDA867411B220E093CD65F /* main.swift */,
+			);
+			name = DeskflowManagerHelper;
+			path = Sources/DeskflowManagerHelper;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
-/* Begin PBXLegacyTarget section */
-		D10000000000000000000020 /* Deskflow ASM */ = {
-			isa = PBXLegacyTarget;
-			buildArgumentsString = manager;
-			buildConfigurationList = D10000000000000000000031 /* Build configuration list for PBXLegacyTarget "Deskflow ASM" */;
-			buildPhases = (
+/* Begin PBXHeadersBuildPhase section */
+		D69090085F42D4FE1D3C6D75 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
-			buildToolPath = /usr/bin/make;
-			buildWorkingDirectory = "$(PROJECT_DIR)";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4BAFECE3EA97958BF38EF63D /* deskflow-session-supervisor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9CE3E4CE67FDADC680A448FA /* Build configuration list for PBXNativeTarget "deskflow-session-supervisor" */;
+			buildPhases = (
+				F2D29949FBF47436132BE8D4 /* Sources */,
+				945DE5BB12B45BA39E3AE5B5 /* Frameworks */,
+			);
+			buildRules = (
+			);
 			dependencies = (
 			);
-			name = "Deskflow ASM";
-			passBuildSettingsInEnvironment = 1;
-			productName = "Deskflow ASM";
+			name = "deskflow-session-supervisor";
+			productName = "deskflow-session-supervisor";
+			productReference = 630B49616BC5E020A5735912 /* deskflow-session-supervisor */;
+			productType = "com.apple.product-type.tool";
 		};
-/* End PBXLegacyTarget section */
+		74B2823F74E91AFFDC6156F9 /* DeskflowManagerCore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C5C841814C1FE7F13661EBB1 /* Build configuration list for PBXNativeTarget "DeskflowManagerCore" */;
+			buildPhases = (
+				D69090085F42D4FE1D3C6D75 /* Headers */,
+				F339C742F5590882B3E6C338 /* Sources */,
+				F524F15D0F6BECEBDE9C01E7 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DeskflowManagerCore;
+			productName = DeskflowManagerCore;
+			productReference = 2DB79985DAB0909F43A0C0A2 /* libDeskflowManagerCore.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		97AE0D9E9B3CC65443380C4C /* Deskflow ASM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 675920BCA262F0F7C8CA8F67 /* Build configuration list for PBXNativeTarget "Deskflow ASM" */;
+			buildPhases = (
+				CBF743E8452D5AF20A3A45F1 /* Sources */,
+				5ED66CD271FF540C29C4F197 /* Frameworks */,
+				8CF163D7614BBD5A8BEA5553 /* Resources */,
+				D2F2B3ABD9CFB660358C9C67 /* Embed Management Helper */,
+				A92B41DE22A120E9D00C0399 /* Embed Supervisor and Installer */,
+				B1491440ED3D8AD13671E939 /* Embed LaunchDaemon Property List */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A16D226240843391A602011 /* PBXTargetDependency */,
+				A64C73E23B37742533C5F3D1 /* PBXTargetDependency */,
+				C34C7100A6666F49BD4F944C /* PBXTargetDependency */,
+				FB3BEB7AC85DAA3AE00CFAEA /* PBXTargetDependency */,
+			);
+			name = "Deskflow ASM";
+			productName = "Deskflow ASM";
+			productReference = 654DEDD377A060F286941177 /* Deskflow ASM.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C87E8F6C454EF9DA81F440F7 /* deskflow-manager-helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D670F8D8A4D6EAC7F80D6DEB /* Build configuration list for PBXNativeTarget "deskflow-manager-helper" */;
+			buildPhases = (
+				0EF40170A502F987274F452F /* Sources */,
+				DBC642CAA793F8E7D2642FC1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				83BDBE05ABE543F98AB6D372 /* PBXTargetDependency */,
+			);
+			name = "deskflow-manager-helper";
+			productName = "deskflow-manager-helper";
+			productReference = EB96AC0936AF3729DADEC3FD /* deskflow-manager-helper */;
+			productType = "com.apple.product-type.tool";
+		};
+		E19D73F1A40A73D91625AD4F /* DeskflowManagerCoreTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 551217A2DDCCD84B7A32B547 /* Build configuration list for PBXNativeTarget "DeskflowManagerCoreTests" */;
+			buildPhases = (
+				C4E6A71800BBDDEBFD2D6CE1 /* Sources */,
+				87045428DD6DC09147A4CCA4 /* Frameworks */,
+				324D3CF12D7946A9E3F4CA65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				413EF42546BE8FB48682B305 /* PBXTargetDependency */,
+			);
+			name = DeskflowManagerCoreTests;
+			productName = DeskflowManagerCoreTests;
+			productReference = BFE89637D18925B575EC943F /* DeskflowManagerCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		ED8DA08CF4F1B10FC78FAD7E /* deskflow-manager-installer-tool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 566D9B4B50312177322FA42D /* Build configuration list for PBXNativeTarget "deskflow-manager-installer-tool" */;
+			buildPhases = (
+				60F432C0C593093ACD682C53 /* Sources */,
+				1D2253FC2CD82473B5627A44 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "deskflow-manager-installer-tool";
+			productName = "deskflow-manager-installer-tool";
+			productReference = 0EF4DA7894CB8AE750A2AF05 /* deskflow-manager-installer-tool */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D10000000000000000000021 /* Project object */ = {
+		3432FBA9A08C604AF2183F90 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 2630;
 				TargetAttributes = {
-					D10000000000000000000020 = {
-						CreatedOnToolsVersion = 26.3;
+					4BAFECE3EA97958BF38EF63D = {
+						DevelopmentTeam = 5MXASL8NZB;
+						ProvisioningStyle = Automatic;
+					};
+					97AE0D9E9B3CC65443380C4C = {
+						DevelopmentTeam = 5MXASL8NZB;
+						ProvisioningStyle = Automatic;
+					};
+					C87E8F6C454EF9DA81F440F7 = {
+						DevelopmentTeam = 5MXASL8NZB;
+						ProvisioningStyle = Automatic;
+					};
+					E19D73F1A40A73D91625AD4F = {
+						DevelopmentTeam = 5MXASL8NZB;
+						ProvisioningStyle = Automatic;
+					};
+					ED8DA08CF4F1B10FC78FAD7E = {
+						DevelopmentTeam = 5MXASL8NZB;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
-			buildConfigurationList = D10000000000000000000030 /* Build configuration list for PBXProject "Deskflow ASM" */;
+			buildConfigurationList = 7504A0572E804396B4D7F61C /* Build configuration list for PBXProject "Deskflow ASM" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -78,69 +538,535 @@
 				en,
 				Base,
 			);
-			mainGroup = D10000000000000000000010;
-			productRefGroup = D10000000000000000000011 /* Products */;
+			mainGroup = BA4F23FF75735176F69467E7;
+			productRefGroup = 2B5191359624066A181B33EF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D10000000000000000000020 /* Deskflow ASM */,
+				74B2823F74E91AFFDC6156F9 /* DeskflowManagerCore */,
+				97AE0D9E9B3CC65443380C4C /* Deskflow ASM */,
+				C87E8F6C454EF9DA81F440F7 /* deskflow-manager-helper */,
+				4BAFECE3EA97958BF38EF63D /* deskflow-session-supervisor */,
+				ED8DA08CF4F1B10FC78FAD7E /* deskflow-manager-installer-tool */,
+				E19D73F1A40A73D91625AD4F /* DeskflowManagerCoreTests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		324D3CF12D7946A9E3F4CA65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8CF163D7614BBD5A8BEA5553 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84346E570E70D8C217DB7BB4 /* DeskflowASM.icns in Resources */,
+				48F9B862BE4040D60216DB3C /* LICENSE in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0EF40170A502F987274F452F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D660E147CB884D808DFC66DA /* AppBundleLayout.swift in Sources */,
+				5A247D6BBC8699A49A56110D /* AuthorizationValidator.swift in Sources */,
+				78C96654FB8D6DB54263F88B /* ManagerXPCService.swift in Sources */,
+				B4E011CF31E707EEB9E02CA7 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F432C0C593093ACD682C53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9208E5B6CB1FF0D72612F986 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4E6A71800BBDDEBFD2D6CE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E575AD613FBAB6CC449DC2E /* BackendSafetyTests.swift in Sources */,
+				01822526368A88491DD3756F /* ManagerModelsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBF743E8452D5AF20A3A45F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77A478B54BAC8B5B4584690A /* HelperClient.swift in Sources */,
+				E43EFC525B73FA219AD2DB16 /* ManagerApp.swift in Sources */,
+				453A5D0699B22DA611E1A632 /* ManagerEventLog.swift in Sources */,
+				837806498B8C1DBD58F3CEDC /* ManagerModel.swift in Sources */,
+				EA288F80B0BAD5AF4510ACDF /* ManagerView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2D29949FBF47436132BE8D4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EBCB961FE7CFF5E68A212E9F /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F339C742F5590882B3E6C338 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7C5D32854123103FF138C046 /* AgentPlistStore.swift in Sources */,
+				075338A7A1A74121799B91A8 /* CodeSignatureValidator.swift in Sources */,
+				9DAAF1D328A7299CA42A38DF /* DeskflowManagerBackend.swift in Sources */,
+				0F338150F6D23CB005B7122B /* FixedProcessRunner.swift in Sources */,
+				E60F4712BA94396BE3B3421D /* LaunchdController.swift in Sources */,
+				D910436CCAFB3E50A7D73388 /* LocalAccountDiscovery.swift in Sources */,
+				4DEA696C8FA2F84CE2D3D33C /* ManagerErrors.swift in Sources */,
+				E138B114E80EA1EC47913898 /* ManagerModels.swift in Sources */,
+				2D2029A121E524EBD331ABC6 /* SecureFileSystem.swift in Sources */,
+				3A0C435B65B93EBF3C76134E /* SystemSnapshotProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		413EF42546BE8FB48682B305 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = DeskflowManagerCore;
+			target = 74B2823F74E91AFFDC6156F9 /* DeskflowManagerCore */;
+			targetProxy = 7F5A7930F44AD2A8E34296E0 /* PBXContainerItemProxy */;
+		};
+		83BDBE05ABE543F98AB6D372 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = DeskflowManagerCore;
+			target = 74B2823F74E91AFFDC6156F9 /* DeskflowManagerCore */;
+			targetProxy = 1CA62B7FA0B2EF8B709BF6D0 /* PBXContainerItemProxy */;
+		};
+		9A16D226240843391A602011 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = DeskflowManagerCore;
+			target = 74B2823F74E91AFFDC6156F9 /* DeskflowManagerCore */;
+			targetProxy = 19718CE3AFC3AFD2BFC04339 /* PBXContainerItemProxy */;
+		};
+		A64C73E23B37742533C5F3D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "deskflow-manager-helper";
+			target = C87E8F6C454EF9DA81F440F7 /* deskflow-manager-helper */;
+			targetProxy = 41E94CFD1495888AD2D779C7 /* PBXContainerItemProxy */;
+		};
+		C34C7100A6666F49BD4F944C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "deskflow-session-supervisor";
+			target = 4BAFECE3EA97958BF38EF63D /* deskflow-session-supervisor */;
+			targetProxy = 56852E3A0B4AC3FF15C97194 /* PBXContainerItemProxy */;
+		};
+		FB3BEB7AC85DAA3AE00CFAEA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "deskflow-manager-installer-tool";
+			target = ED8DA08CF4F1B10FC78FAD7E /* deskflow-manager-installer-tool */;
+			targetProxy = EFE9C2591DE2705A70080A5F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
-		D10000000000000000000040 /* Debug */ = {
+		2AA365C44F4256F40592579F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION = debug;
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		D10000000000000000000041 /* Release */ = {
+		323D1306570E85782448980D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CONFIGURATION = release;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_CODE_SIGN_FLAGS = "--identifier $(PRODUCT_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.manager-helper";
+				PRODUCT_NAME = "deskflow-manager-helper";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		42CA64D69BB15D417E146C39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		D10000000000000000000042 /* Debug */ = {
+		43ADB7FD25F6AF9986430607 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				CONFIGURATION = debug;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				EXECUTABLE_NAME = "Deskflow Active Session Manager";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "packaging/DeskflowManager-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.manager";
+				PRODUCT_NAME = "Deskflow ASM";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		D10000000000000000000043 /* Release */ = {
+		632C72A57DDDF76CF60B0A0A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
-				CONFIGURATION = release;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_CODE_SIGN_FLAGS = "--identifier $(PRODUCT_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.installer-tool";
+				PRODUCT_NAME = "deskflow-manager-installer-tool";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		7196693D69152E23B30543A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.tests";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		85FC9C75F1CF9B2E8B865840 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_CODE_SIGN_FLAGS = "--identifier $(PRODUCT_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.manager-helper";
+				PRODUCT_NAME = "deskflow-manager-helper";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		906F9774B8BD0F6DE63CBFF2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.tests";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A67BD38E92FA1451D7A44C8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				EXECUTABLE_NAME = "Deskflow Active Session Manager";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "packaging/DeskflowManager-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.manager";
+				PRODUCT_NAME = "Deskflow ASM";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		AA464258850BB8AA9D1A59E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_CODE_SIGN_FLAGS = "--identifier $(PRODUCT_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.installer-tool";
+				PRODUCT_NAME = "deskflow-manager-installer-tool";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C13C509E73254E4CB41B2246 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_MODULE_NAME = DeskflowManagerCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		E53F684683CC3F60CAFD362D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_CODE_SIGN_FLAGS = "--identifier $(PRODUCT_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.supervisor";
+				PRODUCT_NAME = "deskflow-session-supervisor";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E6834457BAB1547ECF182DC7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_MODULE_NAME = DeskflowManagerCore;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		F995B5935AF0E713005AC595 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5MXASL8NZB;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				OTHER_CODE_SIGN_FLAGS = "--identifier $(PRODUCT_BUNDLE_IDENTIFIER)";
+				PRODUCT_BUNDLE_IDENTIFIER = "io.github.qweritos.deskflow-active-session.supervisor";
+				PRODUCT_NAME = "deskflow-session-supervisor";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D10000000000000000000030 /* Build configuration list for PBXProject "Deskflow ASM" */ = {
+		551217A2DDCCD84B7A32B547 /* Build configuration list for PBXNativeTarget "DeskflowManagerCoreTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D10000000000000000000040 /* Debug */,
-				D10000000000000000000041 /* Release */,
+				7196693D69152E23B30543A7 /* Release */,
+				906F9774B8BD0F6DE63CBFF2 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
-		D10000000000000000000031 /* Build configuration list for PBXLegacyTarget "Deskflow ASM" */ = {
+		566D9B4B50312177322FA42D /* Build configuration list for PBXNativeTarget "deskflow-manager-installer-tool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D10000000000000000000042 /* Debug */,
-				D10000000000000000000043 /* Release */,
+				632C72A57DDDF76CF60B0A0A /* Release */,
+				AA464258850BB8AA9D1A59E3 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
+		};
+		675920BCA262F0F7C8CA8F67 /* Build configuration list for PBXNativeTarget "Deskflow ASM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A67BD38E92FA1451D7A44C8A /* Release */,
+				43ADB7FD25F6AF9986430607 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7504A0572E804396B4D7F61C /* Build configuration list for PBXProject "Deskflow ASM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AA365C44F4256F40592579F /* Debug */,
+				42CA64D69BB15D417E146C39 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9CE3E4CE67FDADC680A448FA /* Build configuration list for PBXNativeTarget "deskflow-session-supervisor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F995B5935AF0E713005AC595 /* Release */,
+				E53F684683CC3F60CAFD362D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C5C841814C1FE7F13661EBB1 /* Build configuration list for PBXNativeTarget "DeskflowManagerCore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C13C509E73254E4CB41B2246 /* Release */,
+				E6834457BAB1547ECF182DC7 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D670F8D8A4D6EAC7F80D6DEB /* Build configuration list for PBXNativeTarget "deskflow-manager-helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				85FC9C75F1CF9B2E8B865840 /* Release */,
+				323D1306570E85782448980D /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D10000000000000000000021 /* Project object */;
+	rootObject = 3432FBA9A08C604AF2183F90 /* Project object */;
 }
