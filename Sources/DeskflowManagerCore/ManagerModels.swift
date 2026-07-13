@@ -2,7 +2,7 @@ import Foundation
 
 public enum ManagerConstants {
   public static let schemaVersion = 1
-  public static let managerVersion = "0.2.0"
+  public static let managerVersion = "0.2.1"
   public static let maximumSelectedUsers = 64
   public static let appBundleIdentifier =
     "io.github.qweritos.deskflow-active-session.manager"

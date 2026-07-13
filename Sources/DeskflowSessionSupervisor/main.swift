@@ -3,7 +3,7 @@ import CoreGraphics
 import Darwin
 import Foundation
 
-private let programVersion = "0.2.0"
+private let programVersion = "0.2.1"
 
 private struct Options {
   var corePath =
