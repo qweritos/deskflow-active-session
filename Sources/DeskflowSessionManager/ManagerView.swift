@@ -218,6 +218,7 @@ struct ManagerView: View {
         "If input sharing is denied, add this exact executable to Accessibility and Input Monitoring:\n\(ManagerConstants.supervisorPath)"
     ) {
       HStack {
+        Button("Request Permissions") { model.requestInputPermissions() }
         Button("Accessibility") { model.openAccessibilitySettings() }
         Button("Input Monitoring") { model.openInputMonitoringSettings() }
       }

@@ -14,8 +14,9 @@ done
 
 (cd "$ROOT_DIR" && swift build -c release >/dev/null)
 "$BINARY" --help >/dev/null
-[[ $("$BINARY" --version) == "0.2.2" ]]
-[[ $("$MANAGER_BINARY" --version) == "0.2.2" ]]
+"$BINARY" --help | grep -q -- '--request-permissions'
+[[ $("$BINARY" --version) == "0.2.3" ]]
+[[ $("$MANAGER_BINARY" --version) == "0.2.3" ]]
 "$BINARY" --core /usr/bin/true --check >/dev/null
 DESKFLOW_CORE=/usr/bin/true \
   "$ROOT_DIR/scripts/install.sh" --dry-run "$(id -un)" >/dev/null

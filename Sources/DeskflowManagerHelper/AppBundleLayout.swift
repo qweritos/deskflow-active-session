@@ -1,7 +1,6 @@
 import Darwin
 import DeskflowManagerCore
 import Foundation
-import MachO
 import Security
 
 struct AppBundleLayout {
@@ -67,26 +66,29 @@ struct AppBundleLayout {
   }
 
   private static func executableURL() throws -> URL {
-    var size: UInt32 = 0
-    _ = _NSGetExecutablePath(nil, &size)
-    guard size > 1, size <= UInt32(PATH_MAX * 4) else {
+    var runningCode: SecCode?
+    guard SecCodeCopySelf([], &runningCode) == errSecSuccess,
+      let runningCode
+    else {
       throw ManagerBackendError.invalidPayload(
         "Could not determine the manager helper executable path."
       )
     }
 
-    var buffer = [CChar](repeating: 0, count: Int(size))
-    let result = buffer.withUnsafeMutableBufferPointer { pointer in
-      _NSGetExecutablePath(pointer.baseAddress, &size)
-    }
-    guard result == 0 else {
+    var staticCode: SecStaticCode?
+    guard SecCodeCopyStaticCode(runningCode, [], &staticCode) == errSecSuccess,
+      let staticCode
+    else {
       throw ManagerBackendError.invalidPayload(
         "Could not determine the manager helper executable path."
       )
     }
 
-    let reportedPath = String(cString: buffer)
-    guard let resolvedPath = Darwin.realpath(reportedPath, nil) else {
+    var codeURL: CFURL?
+    guard SecCodeCopyPath(staticCode, [], &codeURL) == errSecSuccess,
+      let codeURL,
+      let resolvedPath = Darwin.realpath((codeURL as URL).path, nil)
+    else {
       throw ManagerBackendError.invalidPayload(
         "Could not resolve the manager helper executable path."
       )

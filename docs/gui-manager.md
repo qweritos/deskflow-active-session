@@ -132,6 +132,11 @@ The manager cannot grant or inspect another process's macOS privacy authorizatio
 
 Replacing an older differently signed supervisor may require removing the old privacy entry and adding this exact path again, even if its existing toggle still looks enabled.
 
+Use **Request Permissions** in the manager to ask macOS for fresh
+Accessibility and Input Monitoring approval for the installed supervisor.
+The adjacent buttons open the corresponding Privacy & Security panes for
+manual review.
+
 ## Security model
 
 The app uses [`SMAppService`](https://developer.apple.com/documentation/servicemanagement/smappservice) to register an on-demand management-only LaunchDaemon. The helper:

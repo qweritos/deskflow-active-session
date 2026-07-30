@@ -463,6 +463,19 @@ final class ManagerModel: ObservableObject {
     openPrivacyPane("Privacy_ListenEvent")
   }
 
+  func requestInputPermissions() {
+    recordEvent("Requesting Accessibility and Input Monitoring permissions")
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: ManagerConstants.supervisorPath)
+    process.arguments = ["--request-permissions"]
+    do {
+      try process.run()
+      recordEvent("Permission request process launched")
+    } catch {
+      showError(title: "Could not request permissions", error: error)
+    }
+  }
+
   private func verifyHelperAndRefresh(
     generation: Int,
     refreshWhenEnabled: Bool

@@ -3,7 +3,7 @@ import CoreGraphics
 import Darwin
 import Foundation
 
-private let programVersion = "0.2.2"
+private let programVersion = "0.2.3"
 
 private struct Options {
   var corePath =
@@ -13,6 +13,7 @@ private struct Options {
   var activationDelay = 0.2
   var stopTimeout = 4.0
   var checkOnly = false
+  var requestPermissions = false
 }
 
 private enum ArgumentError: Error, CustomStringConvertible {
@@ -43,6 +44,7 @@ private func usage() -> String {
     --activation-delay SECONDS   delay after session activation (default: 0.2)
     --stop-timeout SECONDS       graceful shutdown timeout (default: 4.0)
     --check                      validate configuration and print session state
+    --request-permissions        request Accessibility and Input Monitoring
     --version                    print version
     -h, --help                   show this help
   """
@@ -84,6 +86,8 @@ private func parseOptions() throws -> Options {
       options.stopTimeout = try positiveNumber(raw, option: argument)
     case "--check":
       options.checkOnly = true
+    case "--request-permissions":
+      options.requestPermissions = true
     case "--version":
       print(programVersion)
       Darwin.exit(EXIT_SUCCESS)
@@ -177,6 +181,19 @@ private func validate(_ options: Options) -> Bool {
   print("desktop session: \(currentSessionIsOnConsole() ? "active" : "inactive")")
   print("accessibility: \(AXIsProcessTrusted() ? "yes" : "no")")
   return valid
+}
+
+private func requestInputPermissions() -> Bool {
+  let promptOptions = [
+    kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true
+  ] as CFDictionary
+  let accessibility = AXIsProcessTrustedWithOptions(promptOptions)
+  let inputMonitoring =
+    CGPreflightListenEventAccess() || CGRequestListenEventAccess()
+
+  print("accessibility: \(accessibility ? "yes" : "no")")
+  print("input monitoring: \(inputMonitoring ? "yes" : "no")")
+  return accessibility && inputMonitoring
 }
 
 private final class DeskflowSessionSupervisor: @unchecked Sendable {
@@ -418,6 +435,9 @@ private final class DeskflowSessionSupervisor: @unchecked Sendable {
 
 do {
   let options = try parseOptions()
+  if options.requestPermissions {
+    Darwin.exit(requestInputPermissions() ? EXIT_SUCCESS : EXIT_FAILURE)
+  }
   if options.checkOnly {
     Darwin.exit(validate(options) ? EXIT_SUCCESS : EXIT_FAILURE)
   }
